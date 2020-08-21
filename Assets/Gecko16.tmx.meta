@@ -11,3 +11,4 @@ ScriptedImporter:
   scale: 1
   withTilemap: {fileID: 1768051044456664301, guid: 88a19f42885830247940f65e4bf9beca,
     type: 3}
+  offset: -33

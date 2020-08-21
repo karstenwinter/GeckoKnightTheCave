@@ -8,6 +8,7 @@ public class TilemapImporter : ScriptedImporter
 {
     public float m_Scale = 1;
     public GameObject withTilemap;
+    public int offset = 0;
 
     public override void OnImportAsset(AssetImportContext ctx)
     {
@@ -26,17 +27,19 @@ public class TilemapImporter : ScriptedImporter
         {
             y++;
             x = -1;
-            foreach (char c in line)
+            foreach (string c in line.Split(','))
             {
                 x++;
-                if (c != '.')
+                if (c != "" && c != "0")
                 {
                     //var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    var position = new Vector3Int(x, y, 0);
-                    var tile = t.GetTile(new Vector3Int(1, 1, 0));
-                    tilemap.SetTile(
-                         position,
-                      tile);
+                    var position = new Vector3Int(x, -y, 0);
+                    var value = int.Parse(c) + offset;
+                    var tx = ((value % 8) + 8) % 8;
+                    var ty = System.Math.Abs(value / 8);
+                    //tx -= 1;
+                    var tile = t.GetTile(new Vector3Int(tx, ty, 0));
+                    tilemap.SetTile(position, tile);
                     //cube.name="y"+y+"x"+x;
                     //cube.transform.parent=parent.transform;
                     //  cube.transform.position = position;
