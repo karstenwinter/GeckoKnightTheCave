@@ -40,7 +40,7 @@ public class TileLevelImporter : ScriptedImporter
         var gameObjectRoot = new GameObject(name);
         var target = gameObjectRoot.AddComponent<Tilemap>();
         gameObjectRoot.AddComponent<TilemapRenderer>();
-        gameObjectRoot.AddComponent<TilemapCollider2D>();
+        //gameObjectRoot.AddComponent<TilemapCollider2D>();
         //  gameObjectRoot.AddComponent<Transform>();
         string fileContent = File.ReadAllText(ctx.assetPath).Replace("\r", "");
         var lines = fileContent.Split('\n');
@@ -71,13 +71,13 @@ public class TileLevelImporter : ScriptedImporter
         {
             var tilemap = tilemapG.GetComponent<Tilemap>();
             Debug.Log("tilemap: " + tilemap + ", in " + tilemapG + ", range" + startY + "," + endY);
-            for (int y = startY; y < endY; y++)
+            for (int y = startY; y < h; y++)
             {
-                var arr = lines[y].Split(',');
-                w = Math.Min(w, arr.Length);
+                //var arr = lines[y].Split(',');
+                //w = Math.Min(w, arr.Length);
                 for (var x = startX; x < w; x++)
                 {
-                    string current = arr[x];
+                  //  string current = arr[x];
                     //string tag = "t" + current;
 
                     //GameObject cubeObj = new GameObject("y" + y + "x" + x + " " + tag);
@@ -88,9 +88,9 @@ public class TileLevelImporter : ScriptedImporter
                     //cubeObj.transform.localScale = Vector3.one * tileScale;
                     //if (current != "0")
                     {
-                        var value = int.Parse(current);
-                        var tileY = value / 8;
-                        var tileX = value % 8;
+                     //   var value = int.Parse(current);
+                        var tileY = 1;  //value / 8;
+                        var tileX = 1;  //value % 8;
                         var tile = tilemap.GetTile(
                             new Vector3Int(tileX, tileY, 0)
                             );

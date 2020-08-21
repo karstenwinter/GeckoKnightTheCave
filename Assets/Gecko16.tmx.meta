@@ -7,12 +7,7 @@ ScriptedImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-  script: {fileID: 11500000, guid: d77e756ff12728f4f909117a5d177e81, type: 3}
+  script: {fileID: 11500000, guid: c4708677808c0ad119941df3fd895f60, type: 3}
   scale: 1
-  tileScale: 1
-  startY: 0
-  startX: 0
-  w: 333
-  h: 333
-  tilemapG: {fileID: 1437592374409638750, guid: 88a19f42885830247940f65e4bf9beca,
+  withTilemap: {fileID: 2037637150265657992, guid: 88a19f42885830247940f65e4bf9beca,
     type: 3}
