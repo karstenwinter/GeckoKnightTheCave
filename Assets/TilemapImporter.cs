@@ -22,11 +22,10 @@ public class TilemapImporter : ScriptedImporter
         var tilemapR = parent.AddComponent<TilemapRenderer>();
         var tilemapC = parent.AddComponent<TilemapCollider2D>();
         var y = -1;
-        var x = -1;
         foreach (string line in txt)
         {
             y++;
-            x = -1;
+            int x = -1;
             foreach (string c in line.Split(','))
             {
                 x++;
@@ -37,6 +36,7 @@ public class TilemapImporter : ScriptedImporter
                     var value = int.Parse(c) + offset;
                     var tx = ((value % 8) + 8) % 8;
                     var ty = System.Math.Abs(value / 8);
+                    Debug.Log("y" + y + "x" + x + "=>v" + value + "=>ty" + ty + "tx" + tx);
                     //tx -= 1;
                     var tile = t.GetTile(new Vector3Int(tx, ty, 0));
                     tilemap.SetTile(position, tile);
