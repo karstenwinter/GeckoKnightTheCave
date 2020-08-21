@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: da9f4ae183e5b43449d566116a87ee20
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: d77e756ff12728f4f909117a5d177e81, type: 3}
+  scale: 1
+  tileScale: 1
+  startY: 0
+  startX: 0
+  w: 333
+  h: 333
+  tilemapG: {fileID: 1437592374409638750, guid: 88a19f42885830247940f65e4bf9beca,
+    type: 3}
