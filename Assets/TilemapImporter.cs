@@ -19,6 +19,7 @@ public class TilemapImporter : ScriptedImporter
         //var position = JsonUtility.FromJson<Vector3>(txt);
         var tilemap = parent.AddComponent<Tilemap>();
         var tilemapR = parent.AddComponent<TilemapRenderer>();
+        var tilemapC = parent.AddComponent<TilemapCollider2D>();
         var y = -1;
         var x = -1;
         foreach (string line in txt)
