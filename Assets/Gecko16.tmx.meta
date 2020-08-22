@@ -8,7 +8,11 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: c4708677808c0ad119941df3fd895f60, type: 3}
-  scale: 2
+  scale: 1
   withTilemap: {fileID: 4523442116364572027, guid: 74915e43d72a373d4a22e74321205519,
     type: 3}
-  offset: 0
+  startX: 0
+  startY: 0
+  width: 512
+  height: 512
+  dummy: 0
