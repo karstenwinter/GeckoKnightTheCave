@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody2D m_playerRb;
     SpriteRenderer m_playerSpriteRenderer;
+    public SpriteRenderer m_playerSpriteRenderer2;
+
     //Animator m_animator;
     //GameManager gameManagerScript;
     InputController m_input;
@@ -82,6 +84,11 @@ public class PlayerMovement : MonoBehaviour
 
     void MovePlayer()
     {
+    	if (m_input.m_jumpPressed) //  && m_input.isOnGround
+        {
+            Jump();
+        }
+
         if (!CheckIfGrabCorner())
         {
             if (m_input.m_crouchPressed)
@@ -93,11 +100,6 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                if (m_input.m_jumpPressed) //  && m_input.isOnGround
-                {
-                    Jump();
-                }
-
                 /*bool attack1Active = m_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack State.Attack1");
 			    bool attack2Active = m_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack State.Attack2");
 
@@ -116,6 +118,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 //tempScale = new Vector2(-1, 1);
                 m_playerSpriteRenderer.flipX = true;
+                m_playerSpriteRenderer2.flipX = true;
                 //swordTransform.localScale = tempScale;
                 //ledgeTrigger.transform.localScale = tempScale;
                 //maincollider.transform.localScale = tempScale;
@@ -127,6 +130,7 @@ public class PlayerMovement : MonoBehaviour
                 //ledgeTrigger.transform.localScale = tempScale;
                 //maincollider.transform.localScale = tempScale;
                 m_playerSpriteRenderer.flipX = false;
+                m_playerSpriteRenderer2.flipX = false;
             }
         }
 
@@ -134,8 +138,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
-        m_input.m_jumpPressed = false;
-        JoyInputController.m_jump = false;
+        //m_input.m_jumpPressed = false;
+        //JoyInputController.m_jump = false;
 
         //if (m_input.isOnGround)
         {

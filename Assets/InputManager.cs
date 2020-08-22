@@ -25,7 +25,7 @@ public static class InputManager
 
     public static bool Jump()
     {
-        bool kb = Input.GetButtonDown("Jump") || JoyInputController.m_jump;
+        bool kb = Input.GetButton("Jump") || JoyInputController.m_jump;
         //private joy
 
         return kb;

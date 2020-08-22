@@ -10,6 +10,7 @@ public class TilemapImporter : ScriptedImporter
     public GameObject withTilemap;
     public int startX, startY, width, height;
     public bool dummy;
+    public PhysicsMaterial2D phsyMaterial;
 
     public override void OnImportAsset(AssetImportContext ctx)
     {
@@ -23,8 +24,13 @@ public class TilemapImporter : ScriptedImporter
         var tilemap = parent.AddComponent<Tilemap>();
         //var tilemapR = 
         parent.AddComponent<TilemapRenderer>();
-        //var tilemapC = 
-        parent.AddComponent<TilemapCollider2D>();
+
+        if (phsyMaterial != null)
+        {
+            var tilemapC =
+            parent.AddComponent<TilemapCollider2D>();
+            tilemapC.sharedMaterial = phsyMaterial;
+        }
         var y = -1;
         foreach (string line in txt)
         {
