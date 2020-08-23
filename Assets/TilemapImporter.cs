@@ -51,8 +51,8 @@ public class TilemapImporter : ScriptedImporter
                     //if (value < 10)
                     //{
                     ///}
-                    var tx = value % 8;
-                    var ty = value / 8;
+                    var tx = value % 8 == 0 ? value - 1 : (value % 8) - 1;
+                    var ty = value % 8 == 0 ? -(value / 8) + 1 : -(value / 8);
                     /*if (value < 9)
                     {
                         value--;
@@ -70,8 +70,8 @@ public class TilemapImporter : ScriptedImporter
                     //Debug.Log("y" + y + "x" + x + ": v" + value + "=> ty" + ty + "tx" + tx);
                     //tx -= 1;
                     var tile = t.GetTile(
-                    new Vector3Int((int)(tx - 1), (int)-ty, 0));
-                    tilemap.SetTile(position 
+                    new Vector3Int((int)tx, (int)ty, 0));
+                    tilemap.SetTile(position
                     - new Vector3Int(startX, startY, 0), tile);
                     //cube.name="y"+y+"x"+x;
                     //cube.transform.parent=parent.transform;

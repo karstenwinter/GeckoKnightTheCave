@@ -15,5 +15,5 @@ ScriptedImporter:
   startY: 0
   width: 512
   height: 512
-  dummy: 0
+  dummy: 1
   phsyMaterial: {fileID: 6200000, guid: 7c252a942fd417d4b8f7f164dbcff2a5, type: 2}
