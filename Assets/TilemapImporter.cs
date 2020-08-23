@@ -69,8 +69,10 @@ public class TilemapImporter : ScriptedImporter
                     }*/
                     //Debug.Log("y" + y + "x" + x + ": v" + value + "=> ty" + ty + "tx" + tx);
                     //tx -= 1;
-                    var tile = t.GetTile(new Vector3Int((int)(tx - 1), (int)-ty, 0));
-                    tilemap.SetTile(position - new Vector3Int(startX, startY, 0), tile);
+                    var tile = t.GetTile(
+                    new Vector3Int((int)(tx - 1), (int)-ty, 0));
+                    tilemap.SetTile(position 
+                    - new Vector3Int(startX, startY, 0), tile);
                     //cube.name="y"+y+"x"+x;
                     //cube.transform.parent=parent.transform;
                     //  cube.transform.position = position;
