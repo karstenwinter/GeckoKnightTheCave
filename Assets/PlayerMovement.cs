@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
         m_input = GetComponent<InputController>();
         m_playerRb = GetComponent<Rigidbody2D>();
         m_playerSpriteRenderer = GetComponent<SpriteRenderer>();
-        m_animator = GetComponent <Animator> ();
+        m_animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider2D>();
         //gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager> ();
         prevPosition = transform.position;
@@ -78,18 +78,18 @@ public class PlayerMovement : MonoBehaviour
 
     public bool CheckIfGrabCorner()
     {
-        return false; // m_input.grabCorner;
+        return m_input.grabCorner;
         //|| m_animator.GetCurrentAnimatorStateInfo(0).IsName("CornerGrab");
     }
 
     void MovePlayer()
     {
-    	    if (m_input.m_jumpPressed) 
+        if (m_input.m_jumpPressed)
         {
             Jump();
         }
 
-        if (!CheckIfGrabCorner())
+        //if (!CheckIfGrabCorner())
         {
             if (m_input.m_crouchPressed)
             {
@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
 
             }
 
-            Vector2 tempScale;
+            // Vector2 tempScale;
             // flip sprite based on direction facing
             if (m_moveX < 0.0f)
             {
@@ -135,7 +135,6 @@ public class PlayerMovement : MonoBehaviour
 
             m_animator.SetFloat("moving", Mathf.Abs(m_moveX));
         }
-
     }
 
     void Jump()
@@ -143,12 +142,12 @@ public class PlayerMovement : MonoBehaviour
         //m_input.m_jumpPressed = false;
         //JoyInputController.m_jump = false;
 
-        if (m_input.isOnGround)
+        //if (m_input.isOnGround)
         {
             //transform.parent = null;
             m_playerRb.velocity = Vector2.zero;
             m_playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            SetGroundStatus(false);
+            //SetGroundStatus(false);
             m_animator.SetBool("isFalling", false);
 
         }
@@ -199,15 +198,17 @@ public class PlayerMovement : MonoBehaviour
         //RaycastHit2D downRayLeft = Physics2D.Raycast(this.transform.position + new Vector3(-0.35f, 0), Vector2.down, downRaySize);
         //RaycastHit2D downRayRight = Physics2D.Raycast(this.transform.position + new Vector3(0.35f, 0), Vector2.down, downRaySize);
         RaycastHit2D downRay = Physics2D.Raycast(this.transform.position, Vector2.down, downRaySize);
+        Debug.DrawRay(this.transform.position, Vector2.down * downRaySize, Color.red);
 
         if (downRay.collider != null)
         // || downRayLeft.collider != null || downRayRight.collider != null
         {
+            Debug.Log("Coll " + downRay.collider+ "/"+ downRay.collider.tag);
             //bool leftCollider = downRayLeft.collider != null && downRayLeft.collider.tag == "Ground&Obstacles";
             //bool rightCollider = downRayRight.collider != null && downRayRight.collider.tag == "Ground&Obstacles";
-            bool centerCollider = downRay.collider != null; // && downRay.collider.tag == "Ground&Obstacles";
+            //bool centerCollider = downRay.collider != null; // && downRay.collider.tag == "Ground&Obstacles";
 
-            if (centerCollider) // || rightCollider || leftCollider)
+            //if (centerCollider) // || rightCollider || leftCollider)
             {
                 SetGroundStatus(true);
             }

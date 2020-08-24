@@ -2,6 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+static class Input2
+{
+    public static float hor = float.NaN;
+    public static bool? jump = null;
+    public static float GetAxis(string s)
+    {
+        return s == "Horizontal" ? float.IsNaN(hor) ? Input.GetAxis(s) : hor : 0;
+    }
+    public static bool GetButton(string s)
+    {
+        return s == "Jump" ? jump == null ? Input.GetButton(s) : jump.Value : false;
+    }
+}
+
 class JoyInputController
 {
     internal static float m_forward;
@@ -15,7 +29,7 @@ public static class InputManager
 
     public static float Forward()
     {
-        float kb = Input.GetAxis("Horizontal");
+        float kb = Input2.GetAxis("Horizontal");
 
         kb += JoyInputController.m_forward;
         kb = Mathf.Clamp(kb, -1f, 1f);
@@ -25,7 +39,7 @@ public static class InputManager
 
     public static bool Jump()
     {
-        bool kb = Input.GetButton("Jump") || JoyInputController.m_jump;
+        bool kb = Input2.GetButton("Jump") || JoyInputController.m_jump;
         //private joy
 
         return kb;

@@ -11,6 +11,7 @@ public class TilemapImporter : ScriptedImporter
     public int startX, startY, width, height;
     public bool dummy;
     public PhysicsMaterial2D phsyMaterial;
+    public Material renderMaterial;
 
     public override void OnImportAsset(AssetImportContext ctx)
     {
@@ -20,10 +21,13 @@ public class TilemapImporter : ScriptedImporter
         .Replace("\r", "")
         .Split('\n');
         string[] txt = layerText;
-        //var position = JsonUtility.FromJson<Vector3>(txt);
+
         var tilemap = parent.AddComponent<Tilemap>();
-        //var tilemapR = 
-        parent.AddComponent<TilemapRenderer>();
+        var tilemapR = parent.AddComponent<TilemapRenderer>();
+        if (renderMaterial != null)
+        {
+            tilemapR.material = renderMaterial;
+        }
 
         if (phsyMaterial != null)
         {
@@ -51,7 +55,7 @@ public class TilemapImporter : ScriptedImporter
                     //if (value < 10)
                     //{
                     ///}
-                    var tx = value % 8 == 0 ? value - 1 : (value % 8) - 1;
+                    var tx = value == 8 ? 7 : value % 8 == 0 ? (value % 8) - 1 : (value % 8) - 1;
                     var ty = value % 8 == 0 ? -(value / 8) + 1 : -(value / 8);
                     /*if (value < 9)
                     {
