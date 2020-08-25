@@ -10,8 +10,16 @@ public class TilemapImporter : ScriptedImporter
     public GameObject withTilemap;
     public int startX, startY, width, height;
     public bool dummy;
+    public bool foregroundCharacters;
     public PhysicsMaterial2D phsyMaterial;
     public Material renderMaterial;
+    int[] foregroundIgnoreArr =
+    {
+        //51, 59, // geckoDummy
+        //65,66,67,68,69,70,71,72, // num
+        //73,74,75,76,77,78,79,80, // alpha
+        // 311,312,319 // fireflies
+    };
 
     public override void OnImportAsset(AssetImportContext ctx)
     {
@@ -52,11 +60,17 @@ public class TilemapImporter : ScriptedImporter
                     {
                         Debug.LogError("c => error " + c);
                     }
+                    if (foregroundCharacters && System.Array.IndexOf(foregroundIgnoreArr, c) != -1)
+                    {
+                        continue;
+                    }
                     //if (value < 10)
                     //{
                     ///}
-                    var tx = value == 8 ? 7 : value % 8 == 0 ? (value % 8) - 1 : (value % 8) - 1;
-                    var ty = value % 8 == 0 ? -(value / 8) + 1 : -(value / 8);
+                    var tx = value % 8 == 0 ? (value % 8) + 8 - 1 : (value % 8) - 1;
+                    var ty =
+                        value % 8 == 0 ? -(value / 8) + 1 :
+                        -(value / 8);
                     /*if (value < 9)
                     {
                         value--;

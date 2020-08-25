@@ -48,4 +48,14 @@ public class InputCanvas : MonoBehaviour
         Debug.Log("OnJumpUp");
         Input2.jump = null;
     }
+    public void OnCrouch()
+    {
+        Debug.Log("OnCrouch");
+        Input2.crouch = true;
+    }
+    public void OnCrouchUp()
+    {
+        Debug.Log("OnCrouchUp");
+        Input2.crouch = null;
+    }
 }

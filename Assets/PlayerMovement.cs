@@ -10,33 +10,38 @@ public class PlayerMovement : MonoBehaviour
     public int playerSpeed = 10;
     public int jumpForce = 1250;
     public float downRaySize = 0.8f;
+    public float countAsFallingThreshold = 0.2f;
+    
     //public Transform swordTransform;
     //public GameObject ledgeTrigger;
     //public GameObject maincollider;
+    public Vector2 colliderCrouchSize, colliderSize;
+    public Vector2 colliderCrouchOffset, colliderOffset;
 
-    Rigidbody2D m_playerRb;
-    SpriteRenderer m_playerSpriteRenderer;
+    Rigidbody2D playerRb;
+    SpriteRenderer playerSpriteRenderer;
     //public SpriteRenderer m_playerSpriteRenderer2;
 
-    Animator m_animator;
+    Animator animator;
     //GameManager gameManagerScript;
-    InputController m_input;
+    InputController input;
 
-    float m_moveX;
+    float moveX;
     Vector2 prevPosition;
     [SerializeField]
     int MAX_HEALTH = 100;
     float currentHealth;
-    BoxCollider2D boxCollider;
+    CapsuleCollider2D collider;
+    private bool isCrouching;
 
     // Use this for initialization
     void Awake()
     {
-        m_input = GetComponent<InputController>();
-        m_playerRb = GetComponent<Rigidbody2D>();
-        m_playerSpriteRenderer = GetComponent<SpriteRenderer>();
-        m_animator = GetComponent<Animator>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        input = GetComponent<InputController>();
+        playerRb = GetComponent<Rigidbody2D>();
+        playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+        collider = GetComponent<CapsuleCollider2D>();
         //gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager> ();
         prevPosition = transform.position;
         currentHealth = MAX_HEALTH;
@@ -44,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        m_moveX = m_input.m_horizontal;
+        moveX = input.m_horizontal;
         CheckIfAirborne();
         CheckIfFalling();
         ResetIfDead();
@@ -65,41 +70,47 @@ public class PlayerMovement : MonoBehaviour
 
     void ModifyGravity()
     {
-        if (m_input.isFalling)
+        if (input.isFalling)
         {
-            m_playerRb.gravityScale = 2.5f;
+            playerRb.gravityScale = 2.5f;
         }
 
-        if (m_input.isOnGround)
+        if (input.isOnGround)
         {
-            m_playerRb.gravityScale = 4f;
+            playerRb.gravityScale = 4f;
         }
     }
 
     public bool CheckIfGrabCorner()
     {
-        return m_input.grabCorner;
+        return input.grabCorner;
         //|| m_animator.GetCurrentAnimatorStateInfo(0).IsName("CornerGrab");
     }
 
     void MovePlayer()
     {
-        if (m_input.m_jumpPressed)
+        if (input.jumpPressed)
         {
             Jump();
         }
 
         //if (!CheckIfGrabCorner())
         {
-            if (m_input.m_crouchPressed)
+            if (input.m_crouchPressed)
             {
-                if (m_input.isOnGround)
+                if (input.isOnGround)
                 {
                     //m_playerRb.velocity = Vector2.zero;
+                    setCrouching(true);
+                }
+                else
+                {
+                    setCrouching(false);
                 }
             }
             else
             {
+                setCrouching(false);
                 /*bool attack1Active = m_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack State.Attack1");
 			    bool attack2Active = m_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack State.Attack2");
 
@@ -108,80 +119,89 @@ public class PlayerMovement : MonoBehaviour
 			    } else {
 				    m_playerRb.velocity = Vector2.zero;
 			    }*/
-                m_playerRb.velocity = new Vector2(m_moveX * playerSpeed, m_playerRb.velocity.y);
+                playerRb.velocity = new Vector2(moveX * playerSpeed, playerRb.velocity.y);
 
             }
 
             // Vector2 tempScale;
             // flip sprite based on direction facing
-            if (m_moveX < 0.0f)
+            if (moveX < 0.0f)
             {
                 //tempScale = new Vector2(-1, 1);
-                m_playerSpriteRenderer.flipX = true;
+                playerSpriteRenderer.flipX = true;
                 //m_playerSpriteRenderer2.flipX = true;
                 //swordTransform.localScale = tempScale;
                 //ledgeTrigger.transform.localScale = tempScale;
                 //maincollider.transform.localScale = tempScale;
             }
-            else if (m_moveX > 0.0f)
+            else if (moveX > 0.0f)
             {
                 //tempScale = new Vector2(1, 1);
                 //swordTransform.localScale = tempScale;
                 //ledgeTrigger.transform.localScale = tempScale;
                 //maincollider.transform.localScale = tempScale;
-                m_playerSpriteRenderer.flipX = false;
+                playerSpriteRenderer.flipX = false;
                 //m_playerSpriteRenderer2.flipX = false;
             }
 
-            m_animator.SetFloat("moving", Mathf.Abs(m_moveX));
         }
+
+        animator.SetFloat("moving", Mathf.Abs(moveX));
+        animator.SetBool("isGrounded", input.isOnGround);
+        animator.SetBool("isCrouching", isCrouching);
+        animator.SetBool("isJumpPressed", input.jumpPressed);
+        animator.SetBool("isFalling", input.isFalling);
+    }
+
+    private void setCrouching(bool v)
+    {
+        isCrouching = v;
+        collider.size = v ? colliderCrouchSize : colliderSize;
+        collider.offset = v ? colliderCrouchOffset : colliderOffset;
     }
 
     void Jump()
     {
-        //m_input.m_jumpPressed = false;
         //JoyInputController.m_jump = false;
 
-        //if (m_input.isOnGround)
+        if (input.isOnGround)
         {
             //transform.parent = null;
-            m_playerRb.velocity = Vector2.zero;
-            m_playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            //SetGroundStatus(false);
-            m_animator.SetBool("isFalling", false);
-
+            input.jumpPressed = false;
+            playerRb.velocity = Vector2.zero;
+            playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            SetGroundStatus(false);
         }
-
-
     }
 
     void CheckIfFalling()
     {
-        if (!m_input.isOnGround)
+        if (!input.isOnGround)
         {
-            if (transform.position.y < prevPosition.y)
+            if (transform.position.y < prevPosition.y 
+                && Mathf.Abs(transform.position.y - prevPosition.y) > countAsFallingThreshold)
             {
-                m_input.isFalling = true;
+                input.isFalling = true;
             }
         }
         else
         {
-            m_input.isFalling = false;
+            input.isFalling = false;
         }
     }
 
     void CheckIfAirborne()
     {
-        if (!m_input.isOnGround)
+        if (!input.isOnGround)
         {
             if (transform.position.y > prevPosition.y)
             {
-                m_input.isInFlight = true;
+                input.isInFlight = true;
             }
         }
         else
         {
-            m_input.isInFlight = false;
+            input.isInFlight = false;
         }
     }
 
@@ -197,39 +217,41 @@ public class PlayerMovement : MonoBehaviour
     {
         //RaycastHit2D downRayLeft = Physics2D.Raycast(this.transform.position + new Vector3(-0.35f, 0), Vector2.down, downRaySize);
         //RaycastHit2D downRayRight = Physics2D.Raycast(this.transform.position + new Vector3(0.35f, 0), Vector2.down, downRaySize);
-        RaycastHit2D downRay = Physics2D.Raycast(this.transform.position, Vector2.down, downRaySize);
-        Debug.DrawRay(this.transform.position, Vector2.down * downRaySize, Color.red);
+        int nonPlayer = ~(1 << 8);
 
-        if (downRay.collider != null)
+        RaycastHit2D downRay = Physics2D.Raycast(this.transform.position, Vector2.down, downRaySize, nonPlayer);
+        //Debug.DrawRay(transform.position, Vector2.down * downRaySize, Color.red, 1, false);
+        SetGroundStatus(downRay.collider != null);
+        //if (false)
         // || downRayLeft.collider != null || downRayRight.collider != null
         {
-            Debug.Log("Coll " + downRay.collider+ "/"+ downRay.collider.tag);
+            //Debug.Log("Coll " + downRay.collider + "/" + downRay.collider.tag);
             //bool leftCollider = downRayLeft.collider != null && downRayLeft.collider.tag == "Ground&Obstacles";
             //bool rightCollider = downRayRight.collider != null && downRayRight.collider.tag == "Ground&Obstacles";
             //bool centerCollider = downRay.collider != null; // && downRay.collider.tag == "Ground&Obstacles";
 
             //if (centerCollider) // || rightCollider || leftCollider)
             {
-                SetGroundStatus(true);
+
             }
         }
-        else
+        //else
         {
-            SetGroundStatus(false);
+            //SetGroundStatus(false);
         }
     }
 
     void SetGroundStatus(bool m_status)
     {
-        m_input.isOnGround = m_status;
-        m_animator.SetBool("isGrounded", m_status);
+        input.isOnGround = m_status;
+
     }
 
     void DamagePlayer()
     {
         currentHealth -= 15f;
         float healthRatio = currentHealth / MAX_HEALTH;
-        m_input.isHurt = true;
+        input.isHurt = true;
 
         //gameManagerScript.SetPlayerHealth(healthRatio);
 
@@ -263,7 +285,7 @@ public class PlayerMovement : MonoBehaviour
     // Animation Event: On the first keyframe of CornerClimb
     public void ClimbWall()
     {
-        m_playerRb.gravityScale = 4;
-        m_playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        playerRb.gravityScale = 4;
+        playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 }
