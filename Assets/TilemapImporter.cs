@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor.Experimental.AssetImporters;
 using System.IO;
@@ -60,8 +61,9 @@ public class TilemapImporter : ScriptedImporter
                     {
                         Debug.LogError("c => error " + c);
                     }
-                    if (foregroundCharacters && System.Array.IndexOf(foregroundIgnoreArr, c) != -1)
+                    if (foregroundCharacters && System.Array.IndexOf(foregroundIgnoreArr, c) >= 0)
                     {
+                        Debug.Log("Character " + c + " at y" + y + "x" + x);
                         continue;
                     }
                     //if (value < 10)
@@ -118,3 +120,4 @@ public class TilemapImporter : ScriptedImporter
         DestroyImmediate(tempMesh);
     }
 }
+#endif
