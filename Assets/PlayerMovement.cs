@@ -151,6 +151,7 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("isCrouching", isCrouching);
         animator.SetBool("isJumpPressed", input.jumpPressed);
         animator.SetBool("isFalling", input.isFalling);
+        animator.SetBool("isInFlight", input.isInFlight);
     }
 
     private void setCrouching(bool v)
@@ -194,7 +195,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!input.isOnGround)
         {
-            if (transform.position.y > prevPosition.y)
+            if (transform.position.y > prevPosition.y
+                    && Mathf.Abs(transform.position.y - prevPosition.y) > countAsFallingThreshold)
             {
                 input.isInFlight = true;
             }
@@ -224,21 +226,21 @@ public class PlayerMovement : MonoBehaviour
         SetGroundStatus(downRay.collider != null);
         //if (false)
         // || downRayLeft.collider != null || downRayRight.collider != null
-        {
+        //{
             //Debug.Log("Coll " + downRay.collider + "/" + downRay.collider.tag);
             //bool leftCollider = downRayLeft.collider != null && downRayLeft.collider.tag == "Ground&Obstacles";
             //bool rightCollider = downRayRight.collider != null && downRayRight.collider.tag == "Ground&Obstacles";
             //bool centerCollider = downRay.collider != null; // && downRay.collider.tag == "Ground&Obstacles";
 
             //if (centerCollider) // || rightCollider || leftCollider)
-            {
+          //  {
 
-            }
-        }
+            //}
+        //}
         //else
-        {
+        //{
             //SetGroundStatus(false);
-        }
+        //}
     }
 
     void SetGroundStatus(bool m_status)

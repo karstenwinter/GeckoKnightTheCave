@@ -1,8 +1,15 @@
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor.Experimental.AssetImporters;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine.Tilemaps;
+
+public class PrefabDict
+{
+    public int key;
+    public GameObject prefab;
+}
 
 [ScriptedImporter(1, "tmx")]
 public class TilemapImporter : ScriptedImporter
@@ -19,8 +26,10 @@ public class TilemapImporter : ScriptedImporter
         //51, 59, // geckoDummy
         //65,66,67,68,69,70,71,72, // num
         //73,74,75,76,77,78,79,80, // alpha
-        // 311,312,319 // fireflies
+         //311,312,319 // fireflies
     };
+    public List<PrefabDict> prefabs;
+    public GameObject lightPrefab;
 
     public override void OnImportAsset(AssetImportContext ctx)
     {
@@ -44,6 +53,8 @@ public class TilemapImporter : ScriptedImporter
             parent.AddComponent<TilemapCollider2D>();
             tilemapC.sharedMaterial = phsyMaterial;
         }
+       // var lightPrefab = prefabs != null && prefabs.Count > 0 ? prefabs[0].prefab : null;
+
         var y = -1;
         foreach (string line in txt)
         {
@@ -61,11 +72,26 @@ public class TilemapImporter : ScriptedImporter
                     {
                         Debug.LogError("c => error " + c);
                     }
-                    if (foregroundCharacters && System.Array.IndexOf(foregroundIgnoreArr, c) >= 0)
+
+                    GameObject prefab = null;
+                    if (foregroundCharacters) { 
+                    if (value != 312)
+                    //System.Array.IndexOf(foregroundIgnoreArr, c) == -1)
                     {
-                        Debug.Log("Character " + c + " at y" + y + "x" + x);
-                        continue;
+                        
+                           continue;
                     }
+                    else {
+                        Debug.Log("Character " + c + " at y" + y + "x" + x);
+                            prefab = lightPrefab;
+                        }
+                    }
+                    if(prefab != null)
+                    {
+var instance =                         GameObject.Instantiate(prefab, parent.transform);
+                        instance.transform.position = position;
+                    }
+                    else { 
                     //if (value < 10)
                     //{
                     ///}
@@ -98,6 +124,7 @@ public class TilemapImporter : ScriptedImporter
                     //  cube.transform.position = position;
                     //cube.transform.localScale = new Vector3(m_Scale, m_Scale, m_Scale);
                 }
+                }
             }
         }
 
@@ -120,4 +147,4 @@ public class TilemapImporter : ScriptedImporter
         DestroyImmediate(tempMesh);
     }
 }
-#endif
+//#endif
