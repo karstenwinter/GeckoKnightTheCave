@@ -636,7 +636,7 @@ GameObject:
   - component: {fileID: 257247410}
   - component: {fileID: 257247409}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Reset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -767,7 +767,7 @@ GameObject:
   - component: {fileID: 266715663}
   - component: {fileID: 266715662}
   m_Layer: 5
-  m_Name: Text
+  m_Name: TitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -814,7 +814,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: e3abbf25d12f242438525255a101b48d, type: 3}
-    m_FontSize: 11
+    m_FontSize: 35
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -825,39 +825,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Gecko Knight - The Cave - v 0.4
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'
+  m_Text: 
 --- !u!222 &266715663
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1576,8 +1544,9 @@ MonoBehaviour:
   countAsFallingThreshold: 0.2
   colliderCrouchSize: {x: 0.6, y: 0.6}
   colliderSize: {x: 0.6, y: 2.15}
-  colliderCrouchOffset: {x: 0, y: -0.46}
+  colliderCrouchOffset: {x: 0, y: -0.7}
   colliderOffset: {x: 0, y: 0}
+  startPosition: {x: 0, y: 0}
   MAX_HEALTH: 100
 --- !u!114 &878637752
 MonoBehaviour:
@@ -1628,7 +1597,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 878637750}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 250.08, y: -224.12, z: 0}
+  m_LocalPosition: {x: 250.08, y: -227.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1890419142}
@@ -2414,6 +2383,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c07356433c553f14fbc640511dcfa0b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menu: {fileID: 257247407}
+  player: {fileID: 878637750}
+  titleText: {fileID: 266715662}
+  textWriteSpeed: 0.3
+  textStayTime: 1
+  jumpFreely: 0
 --- !u!1001 &1722712234
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3060,7 +3035,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1890419141}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.91}
+  m_LocalPosition: {x: 0, y: 0, z: -2.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 878637754}
@@ -3077,14 +3052,14 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.86
-  m_Range: 27
+  m_Color: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
+  m_Intensity: 3.3
+  m_Range: 33.11
   m_SpotAngle: 50.64755
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -3120,7 +3095,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1.44
+  m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}

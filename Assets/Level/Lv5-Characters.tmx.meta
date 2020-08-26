@@ -32,6 +32,21 @@ ScriptedImporter:
   - key: 320
     prefab: {fileID: 9134372750531492908, guid: 6d1eabd3e5946c21c9b14be4f8bd0f85,
       type: 3}
+  - key: 65
+    prefab: {fileID: 7978518517730436898, guid: 4a06ee3ff1d0d32329cf2bf2f9b088f8,
+      type: 3}
+  - key: 66
+    prefab: {fileID: 7978518517730436898, guid: 4a06ee3ff1d0d32329cf2bf2f9b088f8,
+      type: 3}
+  - key: 67
+    prefab: {fileID: 7978518517730436898, guid: 4a06ee3ff1d0d32329cf2bf2f9b088f8,
+      type: 3}
+  - key: 68
+    prefab: {fileID: 7978518517730436898, guid: 4a06ee3ff1d0d32329cf2bf2f9b088f8,
+      type: 3}
+  - key: 69
+    prefab: {fileID: 7978518517730436898, guid: 4a06ee3ff1d0d32329cf2bf2f9b088f8,
+      type: 3}
   - key: 70
     prefab: {fileID: 7978518517730436898, guid: 4a06ee3ff1d0d32329cf2bf2f9b088f8,
       type: 3}

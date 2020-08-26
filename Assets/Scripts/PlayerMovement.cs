@@ -12,12 +12,14 @@ public class PlayerMovement : MonoBehaviour
     public int jumpForce = 1250;
     public float downRaySize = 0.8f;
     public float countAsFallingThreshold = 0.2f;
-    
+
     //public Transform swordTransform;
     //public GameObject ledgeTrigger;
     //public GameObject maincollider;
     public Vector2 colliderCrouchSize, colliderSize;
     public Vector2 colliderCrouchOffset, colliderOffset;
+
+    public Vector2 startPosition;
 
     Rigidbody2D playerRb;
     SpriteRenderer playerSpriteRenderer;
@@ -46,8 +48,9 @@ public class PlayerMovement : MonoBehaviour
         //gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager> ();
         prevPosition = transform.position;
         currentHealth = MAX_HEALTH;
-        
+
         input.isFalling = true;
+        startPosition = transform.position;
     }
 
     void Update()
@@ -170,7 +173,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //JoyInputController.m_jump = false;
 
-        if (input.isOnGround)
+        if (InputCanvas.instance.jumpFreely || input.isOnGround)
         {
             //transform.parent = null;
             input.jumpPressed = false;
@@ -184,7 +187,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!input.isOnGround)
         {
-            if (transform.position.y < prevPosition.y 
+            if (transform.position.y < prevPosition.y
                 && Mathf.Abs(transform.position.y - prevPosition.y) > countAsFallingThreshold)
             {
                 input.isFalling = true;
@@ -229,22 +232,28 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D downRay = Physics2D.Raycast(this.transform.position, Vector2.down, downRaySize, nonPlayer);
         //Debug.DrawRay(transform.position, Vector2.down * downRaySize, Color.red, 1, false);
         SetGroundStatus(downRay.collider != null);
+
+        if (downRay.collider != null && downRay.collider.name.StartsWith("AreaChange"))
+        {
+            Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
+            InputCanvas.instance.SetText(downRay.collider.name);
+        }
         //if (false)
         // || downRayLeft.collider != null || downRayRight.collider != null
         //{
-            //Debug.Log("Coll " + downRay.collider + "/" + downRay.collider.tag);
-            //bool leftCollider = downRayLeft.collider != null && downRayLeft.collider.tag == "Ground&Obstacles";
-            //bool rightCollider = downRayRight.collider != null && downRayRight.collider.tag == "Ground&Obstacles";
-            //bool centerCollider = downRay.collider != null; // && downRay.collider.tag == "Ground&Obstacles";
+        //Debug.Log("Coll " + downRay.collider + "/" + downRay.collider.tag);
+        //bool leftCollider = downRayLeft.collider != null && downRayLeft.collider.tag == "Ground&Obstacles";
+        //bool rightCollider = downRayRight.collider != null && downRayRight.collider.tag == "Ground&Obstacles";
+        //bool centerCollider = downRay.collider != null; // && downRay.collider.tag == "Ground&Obstacles";
 
-            //if (centerCollider) // || rightCollider || leftCollider)
-          //  {
+        //if (centerCollider) // || rightCollider || leftCollider)
+        //  {
 
-            //}
+        //}
         //}
         //else
         //{
-            //SetGroundStatus(false);
+        //SetGroundStatus(false);
         //}
     }
 
