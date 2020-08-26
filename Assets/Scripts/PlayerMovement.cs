@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     public int playerSpeed = 10;
+    public float crouchSpeedMult = 0.5f;
     public int jumpForce = 1250;
     public float downRaySize = 0.8f;
     public float countAsFallingThreshold = 0.2f;
@@ -121,9 +122,11 @@ public class PlayerMovement : MonoBehaviour
 			    } else {
 				    m_playerRb.velocity = Vector2.zero;
 			    }*/
-                playerRb.velocity = new Vector2(moveX * playerSpeed, playerRb.velocity.y);
 
             }
+            playerRb.velocity = new Vector2(
+            moveX * (isCrouching ? crouchSpeedMult * playerSpeed : playerSpeed),
+                playerRb.velocity.y);
 
             // Vector2 tempScale;
             // flip sprite based on direction facing

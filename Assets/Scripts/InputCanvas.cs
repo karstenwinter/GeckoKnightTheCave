@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class InputCanvas : MonoBehaviour
 {
+    //public GameObject menu;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,42 +22,42 @@ public class InputCanvas : MonoBehaviour
 
     public void OnLeft()
     {
-        Debug.Log("OnLeft");
-        Input2.hor = -1;
+           Input2.hor = -1;
     }
     public void OnLeftUp()
     {
-        Debug.Log("OnLeftUp");
-        Input2.hor = Single.NaN;
+       Input2.hor = Single.NaN;
     }
     public void OnRight()
-    {
-        Debug.Log("OnRight");
-        Input2.hor = 1;
+    {  
+         Input2.hor = 1;
     }
     public void OnRightUp()
     {
-        Debug.Log("OnRightUp");
         Input2.hor = Single.NaN;
     }
     public void OnJump()
     {
-        Debug.Log("OnJump");
         Input2.jump = true;
     }
     public void OnJumpUp()
     {
-        Debug.Log("OnJumpUp");
         Input2.jump = null;
     }
     public void OnCrouch()
     {
-        Debug.Log("OnCrouch");
         Input2.crouch = true;
     }
     public void OnCrouchUp()
     {
-        Debug.Log("OnCrouchUp");
         Input2.crouch = null;
+    }
+    public void OnPause()
+    {
+       // menu.SetEnabled(true);
+    }
+    public void OnReset()
+    {
+
     }
 }
