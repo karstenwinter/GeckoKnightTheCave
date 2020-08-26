@@ -104,14 +104,14 @@ public class PlayerMovement : MonoBehaviour
         {
             if (input.m_crouchPressed)
             {
-                if (input.isOnGround)
+                //if (input.isOnGround)
                 {
                     //m_playerRb.velocity = Vector2.zero;
                     setCrouching(true);
                 }
-                else
+                //else
                 {
-                    setCrouching(false);
+                  //  setCrouching(false);
                 }
             }
             else
