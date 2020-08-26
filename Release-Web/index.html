@@ -26,9 +26,9 @@
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/Release-Web.loader.js";
       var config = {
-        dataUrl: buildUrl + "/Release-Web.data.gz",
-        frameworkUrl: buildUrl + "/Release-Web.framework.js.gz",
-        codeUrl: buildUrl + "/Release-Web.wasm.gz",
+        dataUrl: buildUrl + "/Release-Web.data",
+        frameworkUrl: buildUrl + "/Release-Web.framework.js",
+        codeUrl: buildUrl + "/Release-Web.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "GeckoKnightTheCave",
@@ -48,6 +48,7 @@
         canvas.style.width = "960px";
         canvas.style.height = "600px";
       }
+      canvas.style.background = "url('" + buildUrl + "/Release-Web.jpg') center / cover";
       loadingBar.style.display = "block";
 
       var script = document.createElement("script");

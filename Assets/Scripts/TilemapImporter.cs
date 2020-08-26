@@ -1,11 +1,12 @@
-//#if UNITY_EDITOR
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor.Experimental.AssetImporters;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine.Tilemaps;
 
-public class PrefabDict
+[System.Serializable]
+public struct PrefabDict
 {
     public int key;
     public GameObject prefab;
@@ -28,8 +29,9 @@ public class TilemapImporter : ScriptedImporter
         //73,74,75,76,77,78,79,80, // alpha
          //311,312,319 // fireflies
     };
-    public List<PrefabDict> prefabs;
-    public GameObject lightPrefab;
+    [InspectorName("Prefab mapping")]
+    public PrefabDict[] prefabs;
+    //private GameObject lightPrefab;
 
     public override void OnImportAsset(AssetImportContext ctx)
     {
@@ -53,7 +55,15 @@ public class TilemapImporter : ScriptedImporter
             parent.AddComponent<TilemapCollider2D>();
             tilemapC.sharedMaterial = phsyMaterial;
         }
-       // var lightPrefab = prefabs != null && prefabs.Count > 0 ? prefabs[0].prefab : null;
+        var dict = new Dictionary<int, GameObject>();
+        if (prefabs != null)
+        {
+            foreach (var prefab in prefabs)
+            {
+                dict[prefab.key] = prefab.prefab;
+            }
+        }
+        // var lightPrefab = prefabs != null && prefabs.Count > 0 ? prefabs[0].prefab : null;
 
         var y = -1;
         foreach (string line in txt)
@@ -74,56 +84,53 @@ public class TilemapImporter : ScriptedImporter
                     }
 
                     GameObject prefab = null;
-                    if (foregroundCharacters) { 
-                    if (value != 312)
-                    //System.Array.IndexOf(foregroundIgnoreArr, c) == -1)
+                    if (foregroundCharacters)
                     {
-                        
-                           continue;
-                    }
-                    else {
-                        Debug.Log("Character " + c + " at y" + y + "x" + x);
-                            prefab = lightPrefab;
+                        if (!dict.TryGetValue((int)value, out prefab))
+                        {
+                            continue;
                         }
                     }
-                    if(prefab != null)
-                    {
-var instance =                         GameObject.Instantiate(prefab, parent.transform);
-                        instance.transform.position = position;
-                    }
-                    else { 
-                    //if (value < 10)
-                    //{
-                    ///}
-                    var tx = value % 8 == 0 ? (value % 8) + 8 - 1 : (value % 8) - 1;
-                    var ty =
-                        value % 8 == 0 ? -(value / 8) + 1 :
-                        -(value / 8);
-                    /*if (value < 9)
-                    {
-                        value--;
-                    }*/
 
-                    /*if (value > 9)
+                    if (prefab != null)
                     {
-                        ty += offset;
+                        var instance = GameObject.Instantiate(prefab, parent.transform);
+                        instance.transform.position = position;
                     }
                     else
                     {
-                        value--;
-                        ty += offset2;
-                    }*/
-                    //Debug.Log("y" + y + "x" + x + ": v" + value + "=> ty" + ty + "tx" + tx);
-                    //tx -= 1;
-                    var tile = t.GetTile(
-                    new Vector3Int((int)tx, (int)ty, 0));
-                    tilemap.SetTile(position
-                    - new Vector3Int(startX, startY, 0), tile);
-                    //cube.name="y"+y+"x"+x;
-                    //cube.transform.parent=parent.transform;
-                    //  cube.transform.position = position;
-                    //cube.transform.localScale = new Vector3(m_Scale, m_Scale, m_Scale);
-                }
+                        //if (value < 10)
+                        //{
+                        ///}
+                        var tx = value % 8 == 0 ? (value % 8) + 8 - 1 : (value % 8) - 1;
+                        var ty =
+                            value % 8 == 0 ? -(value / 8) + 1 :
+                            -(value / 8);
+                        /*if (value < 9)
+                        {
+                            value--;
+                        }*/
+
+                        /*if (value > 9)
+                        {
+                            ty += offset;
+                        }
+                        else
+                        {
+                            value--;
+                            ty += offset2;
+                        }*/
+                        //Debug.Log("y" + y + "x" + x + ": v" + value + "=> ty" + ty + "tx" + tx);
+                        //tx -= 1;
+                        var tile = t.GetTile(
+                        new Vector3Int((int)tx, (int)ty, 0));
+                        tilemap.SetTile(position
+                        - new Vector3Int(startX, startY, 0), tile);
+                        //cube.name="y"+y+"x"+x;
+                        //cube.transform.parent=parent.transform;
+                        //  cube.transform.position = position;
+                        //cube.transform.localScale = new Vector3(m_Scale, m_Scale, m_Scale);
+                    }
                 }
             }
         }
@@ -147,4 +154,4 @@ var instance =                         GameObject.Instantiate(prefab, parent.tra
         DestroyImmediate(tempMesh);
     }
 }
-//#endif
+#endif

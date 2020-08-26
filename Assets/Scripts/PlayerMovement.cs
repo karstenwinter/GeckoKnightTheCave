@@ -45,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
         //gameManagerScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager> ();
         prevPosition = transform.position;
         currentHealth = MAX_HEALTH;
+        
+        input.isFalling = true;
     }
 
     void Update()

@@ -15,7 +15,7 @@ static class Input2
     public static bool GetButton(string s)
     {
         return s == "Jump" ? jump == null ? Input.GetButton(s) : jump.Value :
-             s == "Crouch" ? crouch == null ? Input.GetButton(s) : crouch.Value :
+             s == "Fire1" ? crouch == null ? Input.GetButton(s) : crouch.Value :
             false;
     }
 }
