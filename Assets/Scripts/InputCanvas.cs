@@ -17,6 +17,7 @@ public class InputCanvas : MonoBehaviour
     string textToWrite = "Gecko Knight - The Cave";
     int textIndex;
     float writeTimer;
+    public Button[] array;
 
     public bool jumpFreely;
 
@@ -125,6 +126,26 @@ public class InputCanvas : MonoBehaviour
     {
         menu.SetActive(!menu.activeSelf);
     }
+    public void OnScaleUp()
+    {
+        scale(+10);
+    }
+    public void OnScaleDown()
+    {
+        scale(-10);
+    }
+    void scale(int delta)
+    {
+        foreach(var b in array)
+        {
+            var t = ((RectTransform)b.transform);
+            var v = t.sizeDelta;
+            v.x += delta;
+            v.y += delta;
+            t.sizeDelta = v;
+        }
+    }
+
     public void OnReset()
     {
         player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;

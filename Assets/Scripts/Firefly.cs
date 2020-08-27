@@ -5,7 +5,7 @@ using UnityEngine;
 public class Firefly : MonoBehaviour
 {
     Vector3 startPos;
-    float scale = 0.3f;
+    float scale = 0.1f;
 
     void Start()
     {
