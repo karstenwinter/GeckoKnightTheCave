@@ -6,6 +6,8 @@ TagManager:
   tags:
   - AreaChange
   - Light
+  - Enemy
+  - NPC
   layers:
   - Default
   - TransparentFX
