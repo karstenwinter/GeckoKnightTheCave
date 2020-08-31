@@ -49,6 +49,10 @@ public class MoveWASD : MonoBehaviour
             obj = grid[myX, myY];
             setActive(obj, true); 
         }
+        if(dx != 0 || dy != 0)
+        {
+            InputCanvas.instance.PlaySound("move");
+        }
     }
 
     void setActive(List<GameObject> list, bool enabled)

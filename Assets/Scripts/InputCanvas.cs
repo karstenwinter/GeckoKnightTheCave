@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 
 public class InputCanvas : MonoBehaviour
@@ -18,8 +19,11 @@ public class InputCanvas : MonoBehaviour
     int textIndex;
     float writeTimer;
     public Button[] array;
+    public AudioClip[] audioClips;
+    AudioSource audio;
 
     public bool jumpFreely;
+
 
     public void SetText(string t)
     {
@@ -31,6 +35,20 @@ public class InputCanvas : MonoBehaviour
         titleText.color = c;
     }
 
+    public void PlaySound(string t)
+    {
+        foreach(var clip in audioClips)
+        {
+            //Debug.Log(clip.name +"=="+ t);
+            if (clip.name==t)
+            {
+                audio.clip = clip;
+                audio.Play();
+                return;
+            }
+        }
+    }
+
     // Start is called before the first frame update
     public InputCanvas()
     {
@@ -39,15 +57,18 @@ public class InputCanvas : MonoBehaviour
 
     void Start()
     {
-
+        audio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (titleText == null)
+            return;
+
         if (titleText.text != textToWrite)
         {
-            Debug.Log("writeTimer" + writeTimer + ", index" + textIndex);
+            //Debug.Log("writeTimer" + writeTimer + ", index" + textIndex);
             writeTimer -= Time.fixedDeltaTime;
 
             if (writeTimer < 0 && textIndex < textToWrite.Length)
@@ -70,7 +91,7 @@ public class InputCanvas : MonoBehaviour
         {
             if (writeTimer > 0 && textToWrite != "")
             {
-                Debug.Log("writeTimer" + writeTimer + ", alpha " + titleText.color.a);
+                //Debug.Log("writeTimer" + writeTimer + ", alpha " + titleText.color.a);
                 writeTimer -= Time.fixedDeltaTime;
                 if (writeTimer < 0)
                 {

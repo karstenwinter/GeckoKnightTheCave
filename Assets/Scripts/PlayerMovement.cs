@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     float currentHealth;
     CapsuleCollider2D collider;
     private bool isCrouching;
+    float stepCounter, checkStepSound = 14;
 
     // Use this for initialization
     void Awake()
@@ -160,6 +161,18 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("isJumpPressed", input.jumpPressed);
         animator.SetBool("isFalling", input.isFalling);
         animator.SetBool("isInFlight", input.isInFlight);
+
+        if (moveX != 0)
+        {
+            stepCounter += Math.Abs(moveX);
+            if(stepCounter > checkStepSound)
+            {
+                stepCounter = 0;
+                InputCanvas.instance.PlaySound(
+                UnityEngine.Random.value > 0.5f
+                    ? "Right_Step_Stone" : "Left_Step_Stone");
+            }
+        }
     }
 
     private void setCrouching(bool v)
@@ -180,6 +193,8 @@ public class PlayerMovement : MonoBehaviour
             playerRb.velocity = Vector2.zero;
             playerRb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             SetGroundStatus(false);
+
+            InputCanvas.instance.PlaySound("Jump1");
         }
     }
 
@@ -217,7 +232,7 @@ public class PlayerMovement : MonoBehaviour
 
     void ResetIfDead()
     {
-        if (this.transform.position.y < -7)
+        //if (this.transform.position.y < -7)
         {
             //SceneManager.LoadScene("SampleScene");
         }
@@ -259,8 +274,12 @@ public class PlayerMovement : MonoBehaviour
 
     void SetGroundStatus(bool m_status)
     {
+        var old = input.isOnGround;
         input.isOnGround = m_status;
-
+        if(!old && input.isOnGround)
+        {
+            InputCanvas.instance.PlaySound("Landing_Stone");
+        }
     }
 
     void DamagePlayer()
