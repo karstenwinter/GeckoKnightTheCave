@@ -35,6 +35,16 @@ public class InputCanvas : MonoBehaviour
         titleText.color = c;
     }
 
+    public void SetTextDebug(string t)
+    {
+        titleText.text = t;
+        textIndex = 0;
+        textToWrite = t;
+        var c = titleText.color;
+        c.a = 1;
+        titleText.color = c;
+    }
+
     public void PlaySound(string t)
     {
         foreach(var clip in audioClips)

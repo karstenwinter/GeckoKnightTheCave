@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     Animator animator;
     //GameManager gameManagerScript;
     InputController input;
+    Collider2D lastUpColl;
 
     float moveX;
     Vector2 prevPosition;
@@ -36,7 +37,8 @@ public class PlayerMovement : MonoBehaviour
     float currentHealth;
     CapsuleCollider2D collider;
     private bool isCrouching;
-    float stepCounter, checkStepSound = 14;
+    float stepCounter; 
+    public float checkStepSound = 14;
 
     // Use this for initialization
     void Awake()
@@ -162,9 +164,11 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("isFalling", input.isFalling);
         animator.SetBool("isInFlight", input.isInFlight);
 
-        if (moveX != 0)
+        if (moveX != 0 && input.isOnGround)
         {
             stepCounter += Math.Abs(moveX);
+            //Debug.Log("")
+            //InputCanvas.instance.SetTextDebug("step "+stepCounter +"/"+ checkStepSound);
             if(stepCounter > checkStepSound)
             {
                 stepCounter = 0;
@@ -253,6 +257,15 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
             InputCanvas.instance.SetText(downRay.collider.name);
         }
+
+        RaycastHit2D upRay = Physics2D.Raycast(this.transform.position, Vector2.up, downRaySize, nonPlayer);
+
+        if (upRay.collider != null && lastUpColl == null)
+        {
+            InputCanvas.instance.PlaySound("Bump_Head");
+            lastUpColl = upRay.collider;
+        }
+
         //if (false)
         // || downRayLeft.collider != null || downRayRight.collider != null
         //{
