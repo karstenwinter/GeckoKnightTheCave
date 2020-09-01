@@ -6,28 +6,52 @@ public class NPC : MonoBehaviour
 {
     Vector3 startPos;
     public float speed = 2f;
-    public float patrolWidth = 8f;
+    public float patrolWidth = 0f;
     bool headingRight;
     float dx;
+    GameObject mark;
 
     void Start()
     {
         startPos = transform.position;
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.tag == "Mark")
+            {
+                mark = child.gameObject;
+                break;
+            }
+        }
+        Debug.Log("Mark is " + mark);
     }
 
-    void Update()
+            void Update()
     {
-        dx += (headingRight ? speed : -speed) * Time.deltaTime;
-        transform.position = startPos + new Vector3(dx, 0, 0);
+        if(patrolWidth != 0) { 
+            dx += (headingRight ? speed : -speed) * Time.deltaTime;
+            transform.position = startPos + new Vector3(dx, 0, 0);
 
-        if (headingRight && dx > patrolWidth)
-        {
-            headingRight = false;
-        }
+            if (headingRight && dx > patrolWidth)
+            {
+                headingRight = false;
+            }
 
-        if (!headingRight && dx < -patrolWidth)
-        {
-            headingRight = true;
+            if (!headingRight && dx < -patrolWidth)
+            {
+                headingRight = true;
+            }
         }
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        Debug.Log("mark true");
+        mark.SetActive(true);
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        Debug.Log("mark false");
+        mark.SetActive(false);
     }
 }

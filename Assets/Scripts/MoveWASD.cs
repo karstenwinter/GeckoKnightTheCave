@@ -8,7 +8,7 @@ public class MoveWASD : MonoBehaviour
     List<GameObject>[,] grid;
     int myX, myY;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         arr = new List<GameObject>();
         arr.AddRange(GameObject.FindGameObjectsWithTag("NPC"));
