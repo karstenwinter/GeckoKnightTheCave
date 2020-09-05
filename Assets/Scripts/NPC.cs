@@ -9,7 +9,7 @@ public class NPC : MonoBehaviour
     public float patrolWidth = 0f;
     bool headingRight;
     float dx;
-    GameObject mark;
+    public GameObject mark;
 
     void Start()
     {
@@ -41,17 +41,5 @@ public class NPC : MonoBehaviour
                 headingRight = true;
             }
         }
-    }
-
-    void OnTriggerEnter(Collider col)
-    {
-        Debug.Log("mark true");
-        mark.SetActive(true);
-    }
-
-    void OnTriggerExit(Collider col)
-    {
-        Debug.Log("mark false");
-        mark.SetActive(false);
     }
 }

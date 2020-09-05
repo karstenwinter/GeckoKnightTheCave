@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector2 startPosition;
 
+    NPC lastNpcContact;
     Rigidbody2D playerRb;
     SpriteRenderer playerSpriteRenderer;
     //public SpriteRenderer m_playerSpriteRenderer2;
@@ -248,14 +249,49 @@ public class PlayerMovement : MonoBehaviour
         //RaycastHit2D downRayRight = Physics2D.Raycast(this.transform.position + new Vector3(0.35f, 0), Vector2.down, downRaySize);
         int nonPlayer = ~(1 << 8);
 
-        RaycastHit2D downRay = Physics2D.Raycast(this.transform.position, Vector2.down, downRaySize, nonPlayer);
+        RaycastHit2D downRay = Physics2D.Raycast(this.transform.position,
+             Vector2.down, downRaySize, nonPlayer);
         //Debug.DrawRay(transform.position, Vector2.down * downRaySize, Color.red, 1, false);
         SetGroundStatus(downRay.collider != null);
 
-        if (downRay.collider != null && downRay.collider.name.StartsWith("AreaChange"))
+        if (downRay.collider != null)
         {
-            Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
-            InputCanvas.instance.SetText(downRay.collider.name);
+            if (downRay.collider.name.StartsWith("AreaChange"))
+            {
+
+             Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
+             InputCanvas.instance.SetText(downRay.collider.name);
+            }
+            Debug.Log("coll:" + downRay.collider.gameObject);
+            var npc = downRay.collider.gameObject.GetComponent<NPC>();
+            if (npc != null)
+            {
+                if(lastNpcContact != null && lastNpcContact != npc)
+                {
+                    lastNpcContact.mark.SetActive(false);
+                    lastNpcContact = null;
+                    Debug.Log("mark false");
+                }
+                var mark = npc.mark;
+                //void OnTriggerEnter(Collider col)
+                {
+                  Debug.Log("mark true");
+                    mark.SetActive(true);
+                }
+
+                //void OnTriggerExit(Collider col)
+                {
+                    //Debug.Log("mark false");
+                  //  mark.SetActive(false);
+                }
+                lastNpcContact = npc;
+            }
+            else if(lastNpcContact != null)
+            {
+                lastNpcContact.mark.SetActive(false);
+                lastNpcContact = null;
+                Debug.Log("mark false 2");
+            }
         }
 
         RaycastHit2D upRay = Physics2D.Raycast(this.transform.position, Vector2.up, downRaySize, nonPlayer);
