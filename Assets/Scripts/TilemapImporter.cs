@@ -95,7 +95,7 @@ public class TilemapImporter : ScriptedImporter
                     if (prefab != null)
                     {
                         var instance = GameObject.Instantiate(prefab, parent.transform);
-                        instance.transform.position = position;
+                        instance.transform.position = position; // + new Vector3(0, 1.5f, 0);
 
                         instance.name = (instance.tag == null ? "" : instance.tag) + value;
                     }

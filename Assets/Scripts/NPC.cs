@@ -5,10 +5,10 @@ using UnityEngine;
 public class NPC : MonoBehaviour
 {
     Vector3 startPos;
-    public float speed = 2f;
-    public float patrolWidth = 0f;
-    bool headingRight;
-    float dx;
+    //public float speed = 2f;
+    //public float patrolWidth = 0f;
+    //bool headingRight;
+    //float dx;
     public GameObject mark;
 
     void Start()
@@ -22,12 +22,12 @@ public class NPC : MonoBehaviour
                 break;
             }
         }
-        Debug.Log("Mark is " + mark);
+       // Debug.Log("Mark is " + mark);
     }
 
-            void Update()
+    void Update()
     {
-        if(patrolWidth != 0) { 
+        /*if(patrolWidth != 0) { 
             dx += (headingRight ? speed : -speed) * Time.deltaTime;
             transform.position = startPos + new Vector3(dx, 0, 0);
 
@@ -40,6 +40,6 @@ public class NPC : MonoBehaviour
             {
                 headingRight = true;
             }
-        }
+        }*/
     }
 }

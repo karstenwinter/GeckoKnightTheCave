@@ -13,6 +13,7 @@ public class InputCanvas : MonoBehaviour
     public GameObject menu;
     public GameObject player;
     public Text titleText;
+    public Text infoText;
     public float textWriteSpeed;
     public float textStayTime;
     string textToWrite = "Gecko Knight - The Cave";
@@ -23,7 +24,6 @@ public class InputCanvas : MonoBehaviour
     AudioSource audio;
 
     public bool jumpFreely;
-
 
     public void SetText(string t)
     {
@@ -47,10 +47,10 @@ public class InputCanvas : MonoBehaviour
 
     public void PlaySound(string t)
     {
-        foreach(var clip in audioClips)
+        foreach (var clip in audioClips)
         {
             //Debug.Log(clip.name +"=="+ t);
-            if (clip.name==t)
+            if (clip.name == t)
             {
                 audio.clip = clip;
                 audio.Play();
@@ -167,7 +167,7 @@ public class InputCanvas : MonoBehaviour
     }
     void scale(int delta)
     {
-        foreach(var b in array)
+        foreach (var b in array)
         {
             var t = ((RectTransform)b.transform);
             var v = t.sizeDelta;
@@ -185,5 +185,16 @@ public class InputCanvas : MonoBehaviour
         jumpFreely = !jumpFreely;
         SetText("Reset :) jumpFreely: " + jumpFreely);
 
+    }
+
+    public void SetHealth(float currentHealth, float cooldown)
+    {
+        infoText.text = "HEALTH: " + (currentHealth <= 0 ? "" : new String('|', (int)currentHealth))
+            + "\nCooldown: " + (cooldown <= 0 ? "" : new String('|', (int)(cooldown * 10)));
+    }
+
+    public void SetArea(string v)
+    {
+        SetText("Area: " + v);
     }
 }

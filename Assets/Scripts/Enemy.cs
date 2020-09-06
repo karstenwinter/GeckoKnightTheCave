@@ -7,12 +7,27 @@ public class Enemy : MonoBehaviour
     Vector3 startPos;
     public float speed = 2f;
     public float patrolWidth = 8f;
+    public GameObject mark;
+
     bool headingRight;
     float dx;
+    SpriteRenderer render;
+    Animator animator;
 
     void Start()
     {
         startPos = transform.position;
+        render = GetComponent<SpriteRenderer>();
+
+        animator = GetComponent<Animator>();
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.tag == "Mark")
+            {
+                mark = child.gameObject;
+                break;
+            }
+        }
     }
 
     void Update()
@@ -29,5 +44,7 @@ public class Enemy : MonoBehaviour
         {
             headingRight = true;
         }
+        render.flipX = headingRight;
+        animator.SetBool("Walk", true);
     }
 }

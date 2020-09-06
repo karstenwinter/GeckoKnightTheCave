@@ -1,0 +1,63 @@
+GeckoKnight idx,Type,Number,Name,HP,Damage,Needs,Enables,Dialogue
+370,N,1,Frog Sensei,,,I1,G2,"Hmm, where is my foxglove hat...€Could you find it for me?€+needs+You found it! Splendid!€+needs+I will teach you my secret technique: Rock Smash.€+needs+Use it wisely..."
+371,N,2,Bee Hunter,,,,,What happened to my fellow bees...
+372,N,3,Crystal Hermit,,,,,
+373,N,4,Mac Gill,,,X2,,"Blubb...+needs+Ah, you also have gills?"
+374,N,5,Root Hermit,,,,,
+375,N,6,Sand Eater,,,,,
+376,N,7,Root Sage,,,,,
+377,N,8,,,,,,
+378,N,9,,,,,,
+379,N,10,,,,,,
+380,N,11,,,,,,
+381,N,12,,,,,,
+382,N,13,,,,,,
+383,N,14,,,,,,
+384,N,15,,,,,,
+385,N,16,,,,,,
+354,E,1,Mad Spider,10,1,,G1,First Boss
+355,E,2,Bug,3,1,,,Cave resident
+356,E,3,Bee,2,1,,,Hatchington citizen
+357,E,4,Guardian of Depths,7,2,,,Protects the Crystal caves
+358,E,5,Sand Worm,5,2,,,Sand Cliffs worm
+359,E,6,Fish,4,2,,,Swims
+360,E,7,Crawler,2,1,,,Crawls around small platforms
+361,E,8,Dark Eye,,,,,
+362,E,9,Dark Crawler,,,,,
+363,E,10,Moss Maw,,,,,
+364,E,11,Cave Keeper,,,,,Cave last boss
+365,E,12,Crawling Spider,,,,,
+366,E,13,Moss Hornet,,,,,"Moss Alcove Resident, flies"
+367,E,14,Sewer Ratling,,,,,
+368,E,15,Sewer Rat,,,,,
+369,E,16,Sewer Fish Monster,,,,,
+393,G,1,Mad Spider Gate,,,E1,,
+394,G,2,Rock Smash,,1,,,
+395,G,3,,,,,,
+396,G,4,,,,,,
+397,G,5,,,,,,
+398,G,6,,,,,,
+399,G,7,,,,,,
+400,G,8,,,,,,
+388,I,1,Foxglove Hat,,,,,
+389,I,2,Mossy Coin,,,,,
+390,I,3,Calculator,,,I4,X1,The Battery is missing...+needs+Booting up the modified calculator...+minigame+
+391,I,4,Battery,,,,,
+65,A,1,Upper Cave,,,,,
+66,A,2,Hatchington,,,,,
+67,A,3,Rocky Falls,,,,,
+68,A,4,Deep Caves,,,,,
+69,A,5,Sand Cliffs,,,,,
+70,A,6,Crystal Caves,,,,,
+71,A,7,Dark Pit,,,,,
+72,A,8,Moss Alcoves,,,,,
+73,A,9,The Forest,,,,,
+74,A,10,The Sewers,,,,,
+75,A,11,,,,,,
+76,A,12,,,,,,
+77,X,1,The Box Code,,,,,
+78,X,2,Gills,,,,,
+79,X,3,,,,,,
+384,T,1,Scrap,,,,,
+385,T,2,Sharp Metal,,,,,
+386,T,3,Lead,,,,,

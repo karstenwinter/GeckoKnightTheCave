@@ -34,8 +34,12 @@ public class PlayerMovement : MonoBehaviour
     float moveX;
     Vector2 prevPosition;
     [SerializeField]
-    int MAX_HEALTH = 100;
+    int MAX_HEALTH = 5;
     float currentHealth;
+
+    float cooldown;
+    float hitCooldownTime = 0.7f;
+
     CapsuleCollider2D collider;
     private bool isCrouching;
     float stepCounter; 
@@ -69,6 +73,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (cooldown > 0)
+        {
+            cooldown -= Time.deltaTime;
+        }
+
         MovePlayer();
         PlayerRaycast();
 
@@ -234,6 +243,14 @@ public class PlayerMovement : MonoBehaviour
             input.isInFlight = false;
         }
     }
+    void enemyTouched()
+    {
+        if (cooldown <= 0)
+        {
+            cooldown = hitCooldownTime;
+            currentHealth--;
+        }
+    }
 
     void ResetIfDead()
     {
@@ -258,11 +275,18 @@ public class PlayerMovement : MonoBehaviour
         {
             if (downRay.collider.name.StartsWith("AreaChange"))
             {
-
-             Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
-             InputCanvas.instance.SetText(downRay.collider.name);
+             //Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
+             InputCanvas.instance.SetArea(downRay.collider.name.Replace("AreaChange",""));
             }
-            Debug.Log("coll:" + downRay.collider.gameObject);
+            //Debug.Log("coll:" + downRay.collider.gameObject);
+            var enemy = downRay.collider.gameObject.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemyTouched();
+            }
+
+            InputCanvas.instance.SetHealth(currentHealth, cooldown);
+
             var npc = downRay.collider.gameObject.GetComponent<NPC>();
             if (npc != null)
             {
@@ -270,13 +294,13 @@ public class PlayerMovement : MonoBehaviour
                 {
                     lastNpcContact.mark.SetActive(false);
                     lastNpcContact = null;
-                    Debug.Log("mark false");
+                //    Debug.Log("mark false");
                 }
                 var mark = npc.mark;
                 //void OnTriggerEnter(Collider col)
                 {
-                  Debug.Log("mark true");
-                    mark.SetActive(true);
+                 // Debug.Log("mark true");
+                   mark.SetActive(true);
                 }
 
                 //void OnTriggerExit(Collider col)
@@ -290,7 +314,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 lastNpcContact.mark.SetActive(false);
                 lastNpcContact = null;
-                Debug.Log("mark false 2");
+               // Debug.Log("mark false 2");
             }
         }
 

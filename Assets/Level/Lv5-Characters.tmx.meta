@@ -15,7 +15,7 @@ ScriptedImporter:
   startY: 0
   width: 512
   height: 512
-  dummy: 0
+  dummy: 1
   foregroundCharacters: 1
   phsyMaterial: {instanceID: 0}
   renderMaterial: {fileID: 2100000, guid: 794af0824ada580f2acc96913be6d0e3, type: 2}
@@ -49,4 +49,28 @@ ScriptedImporter:
       type: 3}
   - key: 70
     prefab: {fileID: 7978518517730436898, guid: 4a06ee3ff1d0d32329cf2bf2f9b088f8,
+      type: 3}
+  - key: 354
+    prefab: {fileID: 3564189547068322563, guid: 4d98ea204cef2324b8e59055b9504132,
+      type: 3}
+  - key: 355
+    prefab: {fileID: 3564189547068322563, guid: 4d98ea204cef2324b8e59055b9504132,
+      type: 3}
+  - key: 356
+    prefab: {fileID: 3564189547068322563, guid: 4d98ea204cef2324b8e59055b9504132,
+      type: 3}
+  - key: 367
+    prefab: {fileID: 3564189547068322563, guid: 4d98ea204cef2324b8e59055b9504132,
+      type: 3}
+  - key: 367
+    prefab: {fileID: 3564189547068322563, guid: 4d98ea204cef2324b8e59055b9504132,
+      type: 3}
+  - key: 370
+    prefab: {fileID: 3564189547068322563, guid: 4d98ea204cef2324b8e59055b9504132,
+      type: 3}
+  - key: 371
+    prefab: {fileID: 3564189547068322563, guid: 4d98ea204cef2324b8e59055b9504132,
+      type: 3}
+  - key: 372
+    prefab: {fileID: 3564189547068322563, guid: 4d98ea204cef2324b8e59055b9504132,
       type: 3}
