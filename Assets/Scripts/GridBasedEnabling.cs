@@ -30,7 +30,7 @@ public class GridBasedEnabling : MonoBehaviour
 
     int toIndex(float pos)
     {
-        return System.Math.Max(0, System.Math.Min(511, (int)(pos / gridCellSize)));
+        return System.Math.Max(0, System.Math.Min(511, (int)((pos + 4) / gridCellSize)));
     }
 
     // Update is called once per frame
@@ -62,8 +62,9 @@ public class GridBasedEnabling : MonoBehaviour
         {
             foreach(var obj in list)
             {
-               obj.GetComponent<SpriteRenderer>().color = enabled 
-               ? Color.white : Color.black;
+                // obj.GetComponent<SpriteRenderer>().color = enabled 
+                //? Color.white : Color.black;
+                obj.SetActive(enabled);
             }
         }
     }
