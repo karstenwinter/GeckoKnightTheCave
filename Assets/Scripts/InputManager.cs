@@ -18,6 +18,18 @@ static class Input2
              s == "Fire1" ? crouch == null ? Input.GetButton(s) : crouch.Value :
             false;
     }
+    public static bool GetButtonDown(string s)
+    {
+        return s == "Jump" ? jump == null ? Input.GetButtonDown(s) : jump.Value :
+             s == "Fire1" ? crouch == null ? Input.GetButtonDown(s) : crouch.Value :
+            false;
+    }
+    public static bool GetButtonUp(string s)
+    {
+        return s == "Jump" ? jump == null ? Input.GetButtonUp(s) : !jump.Value :
+             s == "Fire1" ? crouch == null ? Input.GetButtonUp(s) : !crouch.Value :
+            false;
+    }
 }
 
 class JoyInputController

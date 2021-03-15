@@ -73,7 +73,7 @@ public class TilemapImporter : ScriptedImporter
             foreach (string c in line.Split(','))
             {
                 x++;
-                if (startX <= x && x <= width && startY <= y && y <= height && c != "" && c != "0")
+                if (startX <= x && x <= width - startX && startY <= y && y <= height - startY && c != "" && c != "0")
                 {
                     //var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     var position = new Vector3Int(x, -y, 0);
