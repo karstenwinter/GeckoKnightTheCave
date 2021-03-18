@@ -9,13 +9,13 @@ ScriptedImporter:
   assetBundleVariant: 
   script: {fileID: 11500000, guid: c4708677808c0ad119941df3fd895f60, type: 3}
   scale: 1
-  withTilemap: {fileID: 8202602044077938909, guid: f4fea57c09e74794791815b74f71eb49,
+  withTilemap: {fileID: 8333228850360373704, guid: 11fd342a2275d4c48a9e076e91afb354,
     type: 3}
   startX: 0
   startY: 0
   width: 512
   height: 512
-  dummy: 1
+  dummy: 0
   foregroundCharacters: 1
   phsyMaterial: {instanceID: 0}
   renderMaterial: {fileID: 2100000, guid: 794af0824ada580f2acc96913be6d0e3, type: 2}
