@@ -1,9 +1,10 @@
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor.Experimental.AssetImporters;
+using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine.Tilemaps;
+using System.Globalization;
 
 [System.Serializable]
 public struct PrefabDict2
@@ -16,6 +17,7 @@ public struct PrefabDict2
 public class LevelImporter : ScriptedImporter
 {
     public float m_Scale = 1;
+    public float tileSize = 6f;
     public GameObject withTilemap;
     public int startX, startY, width, height;
     public bool dummy;
@@ -32,10 +34,12 @@ public class LevelImporter : ScriptedImporter
     [InspectorName("Prefab mapping")]
     public PrefabDict2[] prefabs;
     public Vector3 cellSize = Vector3.one;
+    public Vector3 innerObjectOffset = Vector3.zero;
 
     public override void OnImportAsset(AssetImportContext ctx)
     {
         var parent = new GameObject();
+        parent.name = "Level " + ctx.assetPath;
         var grid = parent.AddComponent<Grid>();
         grid.cellSize = cellSize;
         var str = File.ReadAllText(ctx.assetPath);
@@ -47,11 +51,12 @@ public class LevelImporter : ScriptedImporter
             if(row.StartsWith("#"))
                 continue;
             var parts = row.Split('|');
-            var z = float.Parse(parts[0].Trim());
+            var str1 = parts[0].Trim();
+            var z = float.Parse(str1, CultureInfo.InvariantCulture);
             var file = parts[1].Trim();
             var tilemapType = parts[2].Trim();
             var layer = new GameObject();
-            layer.name = "Layer " + file + " at Z: " + z + " of type " + tilemapType;
+            layer.name = "Layer " + file + " at Z: " + z + " of type " + tilemapType + " // " + str1;
             layer.transform.parent = parent.transform;
             var pos = layer.transform.position;
             pos.z = z;
@@ -61,22 +66,22 @@ public class LevelImporter : ScriptedImporter
         ctx.AddObjectToAsset("main obj", parent);
         ctx.SetMainObject(parent);
 
-        var material = new Material(Shader.Find("Standard"));
-        material.color = Color.red;
+        //var material = new Material(Shader.Find("Standard"));
+        //material.color = Color.red;
 
         // Assets must be assigned a unique identifier string consistent across imports
-        ctx.AddObjectToAsset("my Material", material);
+        //ctx.AddObjectToAsset("my Material", material);
 
         // Assets that are not passed into the context as import outputs must be destroyed
-        var tempMesh = new Mesh();
-        DestroyImmediate(tempMesh);
+        //var tempMesh = new Mesh();
+        //DestroyImmediate(tempMesh);
     }
 
     void populateLayer(GameObject parent, GameObject layer, string file, string tilemapType) {
         var foregroundCharacters = tilemapType == "foreground" || tilemapType == "characters";
         var collision = tilemapType == "collision";
 
-        var t = withTilemap.GetComponent<Tilemap>();
+        var palette = withTilemap.GetComponent<Tilemap>();
         var tilemap = layer.AddComponent<Tilemap>();
         var tilemapR = layer.AddComponent<TilemapRenderer>();
         if (renderMaterial != null)
@@ -131,10 +136,11 @@ public class LevelImporter : ScriptedImporter
 
                     if (prefab != null)
                     {
-                        var instance = GameObject.Instantiate(prefab, parent.transform);
-                        instance.transform.position = position;
+                        var instance = GameObject.Instantiate(prefab);
+                        instance.transform.parent = layer.transform;
 
-                        instance.name = (instance.tag == null ? "" : instance.tag) + value;
+                        instance.transform.position = position * (int)tileSize + innerObjectOffset;
+                        instance.name = (instance.tag == null ? "" : instance.tag) + value + " at " + position + " => " + instance.transform.position;
                     }
                     else
                     {
@@ -144,8 +150,8 @@ public class LevelImporter : ScriptedImporter
                             -(value / 8);
                         // Debug.Log("y" + y + "x" + x + ": v" + value + "=> ty" + ty + "tx" + tx);
                
-                        var tile = t.GetTile(new Vector3Int((int)tx, (int)ty, 0));
-                        tilemap.SetTile(position - new Vector3Int(startX, startY, 0), tile);
+                        var tile = palette.GetTile(new Vector3Int((int)tx, (int)ty, 0));
+                        tilemap.SetTile(position, tile);
                     }
                 }
             }

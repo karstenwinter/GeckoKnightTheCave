@@ -1,9 +1,14 @@
-# z	|	filename					|	type
-0.9	|	Lv1-BGBack.tmx				|	x
-0.4	|	Lv2-BG.tmx					|	x
-0.0	|	Lv3-CollisionLayer 1.tmx	|	collision
-1.0	|	Lv4-Foreground.tmx			|	foreground
-1.4	|	Lv5-Characters.tmx			|	characters
-# area	|	start	|	end		|	name
-# 0		|	000,000	|	012,012	|	Start
-# 1		|	000,000	|	012,012	|	Sewer
+#----------+-------------------------------+---------------+
+# z        |    filename                   |    type       |
+#----------+-------------------------------+---------------+
+6.9        |    Lv1-BGBack.tmx             |    x
+2.0        |    Lv2-BG.tmx                 |    x
+0.0        |    Lv3-CollisionLayer 1.tmx   |    collision
+1.0        |    Lv4-Foreground.tmx         |    foreground
+1.4        |    Lv5-Characters.tmx         |    characters
+#----------+---------------+---------------+---------------+
+# area     |    start      |    end        |    name       |
+#----------+---------------+---------------+---------------+
+# 0        |    000,000    |    012,012    |    Start
+# 1        |    000,000    |    012,012    |    Sewer
+#----------+---------------+---------------+---------------+
