@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.016
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -3192,33 +3192,13 @@ Transform:
   m_Father: {fileID: 1620409047}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1212548491
+--- !u!1001 &1188441494
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -6663050164393836352, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
-        type: 3}
-      propertyPath: m_ChunkCullingBounds.x
-      value: 0.100000024
-      objectReference: {fileID: 0}
-    - target: {fileID: -6663050164393836352, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
-        type: 3}
-      propertyPath: m_ChunkCullingBounds.y
-      value: 0.100000024
-      objectReference: {fileID: 0}
-    - target: {fileID: -3180953049623671146, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
-        type: 3}
-      propertyPath: m_ChunkCullingBounds.x
-      value: 0.100000024
-      objectReference: {fileID: 0}
-    - target: {fileID: -3180953049623671146, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
-        type: 3}
-      propertyPath: m_ChunkCullingBounds.y
-      value: 0.100000024
-      objectReference: {fileID: 0}
     - target: {fileID: -1697770257130207788, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
         type: 3}
       propertyPath: m_ChunkCullingBounds.x
@@ -3263,16 +3243,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TheCave
-      objectReference: {fileID: 0}
-    - target: {fileID: 6098874957440279080, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
-        type: 3}
-      propertyPath: m_ChunkCullingBounds.x
-      value: 0.100000024
-      objectReference: {fileID: 0}
-    - target: {fileID: 6098874957440279080, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
-        type: 3}
-      propertyPath: m_ChunkCullingBounds.y
-      value: 0.100000024
       objectReference: {fileID: 0}
     - target: {fileID: 6559214941580663980, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
         type: 3}
@@ -3328,16 +3298,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7218130996497737318, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
-        type: 3}
-      propertyPath: m_ChunkCullingBounds.x
-      value: 0.100000024
-      objectReference: {fileID: 0}
-    - target: {fileID: 7218130996497737318, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
-        type: 3}
-      propertyPath: m_ChunkCullingBounds.y
-      value: 0.100000024
       objectReference: {fileID: 0}
     - target: {fileID: 8198933907904230958, guid: 27a95e0c824164b469f1fb6c6b49fbd9,
         type: 3}
@@ -3782,7 +3742,7 @@ RectTransform:
   - {fileID: 499124622}
   - {fileID: 900191711}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4902,7 +4862,7 @@ PrefabInstance:
     - target: {fileID: 3564189547068322572, guid: 4d98ea204cef2324b8e59055b9504132,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3564189547068322572, guid: 4d98ea204cef2324b8e59055b9504132,
         type: 3}
@@ -5146,7 +5106,7 @@ PrefabInstance:
     - target: {fileID: 7497254659668260570, guid: cf373e420acf0784692d2a6d28c0279e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7497254659668260570, guid: cf373e420acf0784692d2a6d28c0279e,
         type: 3}

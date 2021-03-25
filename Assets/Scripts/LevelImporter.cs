@@ -130,7 +130,7 @@ public class LevelImporter : ScriptedImporter
                     {
                         if (!dict.TryGetValue((int)value, out prefab))
                         {
-                            continue;
+                            // continue;
                         }
                     }
 
