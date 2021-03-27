@@ -2,8 +2,8 @@
 # z        |    filename                   |    type       |
 #----------+-------------------------------+---------------+
 18         |    Lv1-BGBack.tmx             |    // the very back behind player
-16         |    Lv2-BG.tmx                 |    // very blurry behind player
-12         |    Lv2-BG.tmx                 |    // blurry behind player
+16         |    Lv3-CollisionLayer 3.tmx                 |    // blurry behind player
+12         |    Lv3-CollisionLayer 2.tmx                 |    // blurry behind player
 1.26       |    Lv2-BG.tmx                 |    // right behind player
 0.0        |    Lv3-CollisionLayer 1.tmx   |    collision
 -1.0       |    Lv4-Foreground.tmx         |    foreground

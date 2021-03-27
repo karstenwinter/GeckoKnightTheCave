@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 996ca68f724d3ac438d3b82703a291cd
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: c4708677808c0ad119941df3fd895f60, type: 3}
+  scale: 1
+  withTilemap: {instanceID: 0}
+  startX: 0
+  startY: 0
+  width: 0
+  height: 0
+  dummy: 0
+  foregroundCharacters: 0
+  phsyMaterial: {instanceID: 0}
+  renderMaterial: {instanceID: 0}
+  prefabs: []

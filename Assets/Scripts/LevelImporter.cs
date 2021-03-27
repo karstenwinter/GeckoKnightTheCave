@@ -36,8 +36,44 @@ public class LevelImporter : ScriptedImporter
     public Vector3 cellSize = Vector3.one;
     public Vector3 innerObjectOffset = Vector3.zero;
 
+
+    public Texture2D map;
+
+    string colorToString(Color c) {
+        return comp(c.r)+comp(c.g)+comp(c.b);
+    }
+
+    string comp(float r) {
+        var res=((int)(r * 255));
+        if(res < 16) {
+        return "0"+res.ToString("X");
+        }
+        return res.ToString("X");
+    }
+
+    public static void CopyToClipboard( string s)
+    {
+        TextEditor te = new TextEditor();
+        te.text = s;
+        te.SelectAll();
+        te.Copy();
+    }
+
     public override void OnImportAsset(AssetImportContext ctx)
     {
+        if(map != null) {
+         var res = new System.Text.StringBuilder();
+            Color[] pix = map.GetPixels(0, 0, map.width, map.height);
+              for(int y = 0; y < map.height; y++) {
+                for(int x = 0; x < map.width; x++) {
+                    res.Append(colorToString(pix[y*map.width+x]) + " ");
+                }
+                res.Append("\n");
+            }
+            CopyToClipboard(res.ToString());
+        }
+        
+
         var parent = new GameObject();
         parent.name = "Level " + ctx.assetPath;
         var grid = parent.AddComponent<Grid>();
@@ -56,7 +92,7 @@ public class LevelImporter : ScriptedImporter
             var file = parts[1].Trim();
             var tilemapType = parts[2].Trim();
             var layer = new GameObject();
-            layer.name = "Layer " + file + " at Z: " + z + " of type " + tilemapType + " // " + str1;
+            layer.name = "X Layer " + file + " at Z: " + z + " of type " + tilemapType + " // " + str1;
             layer.transform.parent = parent.transform;
             var pos = layer.transform.position;
             pos.z = z;
@@ -88,11 +124,17 @@ public class LevelImporter : ScriptedImporter
         {
             tilemapR.material = renderMaterial;
         }
-
+        //EdgeCollider2D tilemapC = null;
+        //var points = new List<Vector2>();
         if (phsyMaterial != null && collision)
         {
             var tilemapC = layer.AddComponent<TilemapCollider2D>();
             tilemapC.sharedMaterial = phsyMaterial;
+            tilemapC.usedByComposite = true;
+            var rb = layer.AddComponent<Rigidbody2D>();
+            rb.bodyType = RigidbodyType2D.Static;
+            var cc = layer.AddComponent<CompositeCollider2D>();
+            //tilemapC = layer.AddComponent<EdgeCollider2D>();
         }
 
         var txt = File.ReadAllText("Assets/Level/"+file)
@@ -152,10 +194,18 @@ public class LevelImporter : ScriptedImporter
                
                         var tile = palette.GetTile(new Vector3Int((int)tx, (int)ty, 0));
                         tilemap.SetTile(position, tile);
+                        
+                        //var v = position * (int)tileSize + innerObjectOffset;
+                        // TODO https://www.reddit.com/r/gamedev/comments/cyn7i5/determined_edges_of_a_2d_tilemap/
+                        //points.Add(new Vector2(v.x, v.y));
                     }
                 }
             }
         }
+        //if(tilemapC != null) {
+            //tilemapC.points = points.ToArray();
+            //tilemapC.sharedMaterial = phsyMaterial;
+        //}
     }
 }
 #endif
