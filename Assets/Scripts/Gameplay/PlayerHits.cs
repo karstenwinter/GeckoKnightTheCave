@@ -20,7 +20,7 @@ namespace Platformer.Gameplay
             // player.audioSource.PlayOneShot(player.respawnAudio);
             
             player.animator.SetBool("hit", true);
-            Simulation.Schedule<PlayerStopHit>(1f).player = player;
+            //Simulation.Schedule<PlayerStopHit>(1f).player = player;
         }
     }
 }

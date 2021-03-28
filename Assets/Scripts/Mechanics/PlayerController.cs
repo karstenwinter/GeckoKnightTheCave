@@ -60,13 +60,16 @@ namespace Platformer.Mechanics
                     jumpState = JumpState.PrepareToJump;
                 else if (Input2.GetButtonUp("Jump"))
                 {
+                    Debug.Log("Jump");
                     stopJump = true;
                     Schedule<PlayerStopJump>().player = this;
                 }
-                if (Input2.GetButtonDown("Fire1"))
+                //if (Input2.GetButtonDown("Fire1"))
                 {
-                    Schedule<PlayerHits>().player = this;
+                  //  Debug.Log("Fire1");
+                    //Schedule<PlayerHits>().player = this;
                 }
+                animator.SetBool("hit", Input2.GetButtonDown("Fire1"));
             }
             else
             {
