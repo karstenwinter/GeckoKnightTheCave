@@ -16,7 +16,7 @@ ScriptedImporter:
   startY: 208
   width: 111
   height: 125
-  dummy: 0
+  dummy: 1
   foregroundCharacters: 0
   phsyMaterial: {fileID: 6200000, guid: 7c252a942fd417d4b8f7f164dbcff2a5, type: 2}
   renderMaterial: {fileID: 2100000, guid: 794af0824ada580f2acc96913be6d0e3, type: 2}
