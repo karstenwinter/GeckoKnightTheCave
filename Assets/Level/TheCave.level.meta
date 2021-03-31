@@ -10,7 +10,7 @@ ScriptedImporter:
   script: {fileID: 11500000, guid: c5b510b09dae7a544bd9a21c2aac0f0b, type: 3}
   scale: 2
   tileSize: 1.2
-  withTilemap: {fileID: 8333228850360373704, guid: 11fd342a2275d4c48a9e076e91afb354,
+  withTilemap: {fileID: 4825380589754685331, guid: 4aa063dcf1662b34da7097f6da2142c5,
     type: 3}
   startX: 233
   startY: 208

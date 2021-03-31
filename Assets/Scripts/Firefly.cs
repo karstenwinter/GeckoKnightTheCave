@@ -14,7 +14,7 @@ public class Firefly : MonoBehaviour
 
     void Update()
     {
-        var rnd = new Vector3(Random.value, Random.value, 0) * scale;
+        var rnd = new Vector3(Random.value, Random.value, 0) * scale * Time.deltaTime;
         transform.position = startPos + rnd;
     }
 }

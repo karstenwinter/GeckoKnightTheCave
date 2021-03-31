@@ -10,25 +10,27 @@ static class Input2
 
     public static float GetAxis(string s)
     {
-        return s == "Horizontal" ? float.IsNaN(hor) ? Input.GetAxis(s) : hor : 0;
+        return s == "Horizontal" && !float.IsNaN(hor) ? hor : Input.GetAxis(s);
     }
+
     public static bool GetButton(string s)
     {
-        return s == "Jump" ? jump == null ? Input.GetButton(s) : jump.Value :
-             s == "Fire1" ? crouch == null ? Input.GetButton(s) : crouch.Value :
-            false;
+        return s == "Jump" && jump != null ? jump.Value :
+             s == "Fire1" && crouch != null ? crouch.Value :
+            Input.GetButton(s);
     }
     public static bool GetButtonDown(string s)
     {
-        return s == "Jump" ? jump == null ? Input.GetButtonDown(s) : jump.Value :
-             s == "Fire1" ? crouch == null ? Input.GetButtonDown(s) : crouch.Value :
-            false;
+        return s == "Jump" && jump != null ? jump.Value :
+             s == "Fire1" && crouch != null ? crouch.Value :
+            Input.GetButtonDown(s);
     }
+
     public static bool GetButtonUp(string s)
     {
-        return s == "Jump" ? jump == null ? Input.GetButtonUp(s) : !jump.Value :
-             s == "Fire1" ? crouch == null ? Input.GetButtonUp(s) : !crouch.Value :
-            false;
+        return s == "Jump" && jump != null ? !jump.Value :
+             s == "Fire1" && crouch != null ? !crouch.Value :
+            Input.GetButtonUp(s);
     }
 }
 

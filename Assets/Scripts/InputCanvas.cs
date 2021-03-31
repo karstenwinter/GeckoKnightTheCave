@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 
-
 public class InputCanvas : MonoBehaviour
 {
     public static InputCanvas instance;
@@ -22,6 +21,7 @@ public class InputCanvas : MonoBehaviour
     public Button[] array;
     public AudioClip[] audioClips;
     AudioSource audio;
+    string textBeforepausedText, pausedText = "PAUSED";
 
     public bool jumpFreely;
 
@@ -59,7 +59,6 @@ public class InputCanvas : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     public InputCanvas()
     {
         instance = this;
@@ -70,10 +69,21 @@ public class InputCanvas : MonoBehaviour
         audio = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (titleText == null)
+
+        if(Platformer.Mechanics.PlayerController.gameIsPaused)
+        {
+            if(textBeforepausedText == null) {
+                textBeforepausedText = infoText.text;
+            }
+            infoText.text = pausedText;
+        } else if(textBeforepausedText != null) {
+            infoText.text = textBeforepausedText;
+            textBeforepausedText = null;
+        }
+
+        if (titleText == null || Platformer.Mechanics.PlayerController.gameIsPaused)
             return;
 
         if (titleText.text != textToWrite)
@@ -193,8 +203,26 @@ public class InputCanvas : MonoBehaviour
             + "\nCooldown: " + (cooldown <= 0 ? "" : new String('|', (int)(cooldown * 10)));
     }
 
+    string area;
     public void SetArea(string v)
     {
         SetText("Area: " + v);
+        area = v;
+    }
+
+    public void OnSave()
+    {
+        SaveSystem.Save(player);
+        
+    }
+
+    public void OnLoad()
+    {
+        SaveSystem.Load(player);
+    }
+
+    public void OnExit()
+    {
+        Environment.Exit(0);
     }
 }
