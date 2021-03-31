@@ -16,6 +16,7 @@ public class CameraArea : MonoBehaviour
             Debug.Log("Enter " + this.gameObject.name);
         }
     }
+    
     void OnTriggerExit2D(Collider2D other)
     {
         if(other.tag == "Player" && old != null) {

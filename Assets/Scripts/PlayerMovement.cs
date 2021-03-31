@@ -86,6 +86,16 @@ public class PlayerMovement : MonoBehaviour
             ModifyGravity();
         }
     }
+    
+    void PauseGame ()
+    {
+        Time.timeScale = 0;
+    }
+
+    void ResumeGame ()
+    {
+        Time.timeScale = 1;
+    }
 
     void ModifyGravity()
     {

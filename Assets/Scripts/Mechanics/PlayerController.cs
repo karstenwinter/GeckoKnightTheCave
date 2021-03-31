@@ -41,6 +41,13 @@ namespace Platformer.Mechanics
         readonly PlatformerModel model = Simulation.GetModel<PlatformerModel>();
 
         public Bounds Bounds => collider2d.bounds;
+        
+        public float downRaySize = 0.8f;
+
+        float cooldown;
+        float hitCooldownTime = 0.7f;
+        NPC lastNpcContact;
+        Collider2D lastUpColl;
 
         void Awake()
         {
@@ -76,9 +83,110 @@ namespace Platformer.Mechanics
                 move.x = 0;
             }
             UpdateJumpState();
+            PlayerRaycast();
             base.Update();
         }
 
+        void enemyTouched()
+        {
+            if (cooldown <= 0)
+            {
+                cooldown = hitCooldownTime;
+                health.Decrement();
+            }
+        }
+
+        void ResetIfDead()
+        {
+            //if (this.transform.position.y < -7)
+            {
+                //SceneManager.LoadScene("SampleScene");
+            }
+        }
+
+        void PlayerRaycast()
+        {
+            //RaycastHit2D downRayLeft = Physics2D.Raycast(this.transform.position + new Vector3(-0.35f, 0), Vector2.down, downRaySize);
+            //RaycastHit2D downRayRight = Physics2D.Raycast(this.transform.position + new Vector3(0.35f, 0), Vector2.down, downRaySize);
+            int nonPlayer = ~(1 << 8);
+
+            RaycastHit2D downRay = Physics2D.Raycast(this.transform.position,
+                Vector2.down, downRaySize, nonPlayer);
+
+            if (downRay.collider != null)
+            {
+                if (downRay.collider.name.StartsWith("AreaChange"))
+                {
+                    //Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
+                    InputCanvas.instance.SetArea(downRay.collider.name.Replace("AreaChange",""));
+                }
+                //Debug.Log("coll:" + downRay.collider.gameObject);
+                var enemy = downRay.collider.gameObject.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    enemyTouched();
+                }
+
+                InputCanvas.instance.SetHealth(health.currentHP, cooldown);
+
+                var npc = downRay.collider.gameObject.GetComponent<NPC>();
+                if (npc != null)
+                {
+                    if(lastNpcContact != null && lastNpcContact != npc)
+                    {
+                        lastNpcContact.mark.SetActive(false);
+                        lastNpcContact = null;
+                    //    Debug.Log("mark false");
+                    }
+                    var mark = npc.mark;
+                    //void OnTriggerEnter(Collider col)
+                    {
+                    // Debug.Log("mark true");
+                    mark.SetActive(true);
+                    }
+
+                    //void OnTriggerExit(Collider col)
+                    {
+                        //Debug.Log("mark false");
+                    //  mark.SetActive(false);
+                    }
+                    lastNpcContact = npc;
+                }
+                else if(lastNpcContact != null)
+                {
+                    lastNpcContact.mark.SetActive(false);
+                    lastNpcContact = null;
+                // Debug.Log("mark false 2");
+                }
+            }
+
+            RaycastHit2D upRay = Physics2D.Raycast(this.transform.position, Vector2.up, downRaySize, nonPlayer);
+
+            if (upRay.collider != null && lastUpColl == null)
+            {
+                InputCanvas.instance.PlaySound("Bump_Head");
+                lastUpColl = upRay.collider;
+            }
+
+            //if (false)
+            // || downRayLeft.collider != null || downRayRight.collider != null
+            //{
+            //Debug.Log("Coll " + downRay.collider + "/" + downRay.collider.tag);
+            //bool leftCollider = downRayLeft.collider != null && downRayLeft.collider.tag == "Ground&Obstacles";
+            //bool rightCollider = downRayRight.collider != null && downRayRight.collider.tag == "Ground&Obstacles";
+            //bool centerCollider = downRay.collider != null; // && downRay.collider.tag == "Ground&Obstacles";
+
+            //if (centerCollider) // || rightCollider || leftCollider)
+            //  {
+
+            //}
+            //}
+            //else
+            //{
+            //SetGroundStatus(false);
+            //}
+        }
+        
         void UpdateJumpState()
         {
             jump = false;
