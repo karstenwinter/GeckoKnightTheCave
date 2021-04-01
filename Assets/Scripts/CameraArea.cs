@@ -21,8 +21,8 @@ public class CameraArea : MonoBehaviour
     {
         if(other.tag == "Player" && old != null) {
              Debug.Log("Exit " + this.gameObject.name);
-            confiner.m_BoundingShape2D = old;
-            old = null;
+            //confiner.m_BoundingShape2D = old;
+            //old = null;
         }
     }
 

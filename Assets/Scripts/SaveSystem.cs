@@ -36,7 +36,7 @@ public static class SaveSystem {
     public static SaveState Load(GameObject player) { 
         var path = Application.persistentDataPath + "/player.fun";
         if (File.Exists(path)) { 
-            var formatter= new BinaryFormatter(); 
+            var formatter = new BinaryFormatter(); 
             var stream = new FileStream(path, FileMode.Open); 
             var data = formatter.Deserialize(stream) as SaveState; 
             stream.Close ();

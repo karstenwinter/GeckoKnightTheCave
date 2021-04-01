@@ -4,7 +4,34 @@ using System.Text;
 using System.IO;
 using System.Linq;
 
-class Program {    
+using System.Xml.Linq;
+
+
+public class Tuple1<T1, T2> {
+    public T1 Item1;
+    public T2 Item2;
+    public override string ToString()
+    {
+        return Item1 + ", " + Item2;
+    }
+}
+
+public static class Tuple1 {
+    public static Tuple1<T1, T2> Create<T1, T2>(T1 a, T2 b) {
+        return new Tuple1<T1, T2>() { Item1 = a, Item2 = b };
+    }
+}
+
+class Program {   
+
+    static void Main(string[] args) {
+        var str = File.ReadAllText("../../Level/Gecko16.tmx");
+        var doc = XDocument.Parse(str);
+        Tuple1<string, string>[] levelText = doc.Element("map").Elements("layer").Select(x=>Tuple1.Create(x.Attribute("name").Value, x.Element("data").FirstNode.ToString())).ToArray();
+        
+        foreach(var x in levelText) Console.WriteLine(x);
+    }
+
     int w = 128;
     int h = 128;
     string freeC = "9CA7AE";
@@ -28,7 +55,7 @@ class Program {
         public int num;
     }
 
-    static void Main(string[] args) {
+    static void Main1(string[] args) {
         new Program();
     }
     Corner? findTopLeft () {

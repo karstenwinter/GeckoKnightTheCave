@@ -1,13 +1,13 @@
 #----------+-------------------------------+---------------+
 # z        |    filename                   |    type       |
 #----------+-------------------------------+---------------+
-18         |    Lv1-BGBack.tmx             |    // the very back behind player
-16         |    Lv3-CollisionLayer 3.tmx                 |    // blurry behind player
-12         |    Lv3-CollisionLayer 2.tmx                 |    // blurry behind player
-1.26       |    Lv2-BG.tmx                 |    // right behind player
-0.0        |    Lv3-CollisionLayer 1.tmx   |    collision
--0.02       |    Lv4-Foreground.tmx         |    foreground
--0.03       |    Lv5-Characters.tmx         |    characters
+18         |    Lv1-BGBack.txt             |    // the very back behind player
+16         |    Lv3-CollisionLayer 3.txt                 |    // blurry behind player
+12         |    Lv3-CollisionLayer 2.txt                 |    // blurry behind player
+1.26       |    Lv2-BG.txt                 |    // right behind player
+0.0        |    Lv3-CollisionLayer 1.txt   |    collision
+-0.02       |    Lv4-Foreground.txt         |    foreground
+-0.03       |    Lv5-Characters.txt         |    characters
 #----------+---------------+---------------+---------------+
 # area     |    start      |    end        |    name       |
 #----------+---------------+---------------+---------------+

@@ -9,21 +9,28 @@ using UnityEngine.Audio;
 public class InputCanvas : MonoBehaviour
 {
     public static InputCanvas instance;
+    public bool gameIsPaused;
+    public GameObject bg;
+    public GameObject mobileMenu;
+    public GameObject mobileMenu2;
     public GameObject menu;
+    public GameObject mainMenu;
+    public GameObject inGameUi;
     public GameObject player;
     public Text titleText;
     public Text infoText;
     public float textWriteSpeed;
     public float textStayTime;
-    string textToWrite = "Gecko Knight - The Cave";
-    int textIndex;
-    float writeTimer;
+    string textToWrite = "Gecko Knight\nChapter 1: The Cave";
     public Button[] array;
     public AudioClip[] audioClips;
-    AudioSource audio;
-    string textBeforepausedText, pausedText = "PAUSED";
-
+    string textBeforepausedText, pausedText = "";
+    public bool startInMenu;
     public bool jumpFreely;
+
+    int textIndex;
+    float writeTimer;
+    AudioSource audio;
 
     public void SetText(string t)
     {
@@ -67,12 +74,28 @@ public class InputCanvas : MonoBehaviour
     void Start()
     {
         audio = GetComponent<AudioSource>();
+        menu.active = false;
+        mainMenu.active = startInMenu;
+        bg.active = startInMenu;
+        gameIsPaused = startInMenu;
+    }
+
+    void PauseLogic() {
+        Time.timeScale = gameIsPaused ? 0f : 1f;
+        AudioListener.pause = gameIsPaused;
+        menu.active = !mainMenu.active && gameIsPaused;
+        bg.active = mainMenu.active || menu.active;
+        inGameUi.active = !mainMenu.active && !gameIsPaused;
     }
 
     void Update()
     {
-
-        if(Platformer.Mechanics.PlayerController.gameIsPaused)
+        if(!mainMenu.active && Input2.GetButtonDown("Cancel")) {
+            gameIsPaused = !gameIsPaused;
+        }
+        PauseLogic();
+        
+        if(gameIsPaused)
         {
             if(textBeforepausedText == null) {
                 textBeforepausedText = infoText.text;
@@ -83,7 +106,7 @@ public class InputCanvas : MonoBehaviour
             textBeforepausedText = null;
         }
 
-        if (titleText == null || Platformer.Mechanics.PlayerController.gameIsPaused)
+        if (titleText == null || gameIsPaused)
             return;
 
         if (titleText.text != textToWrite)
@@ -163,10 +186,17 @@ public class InputCanvas : MonoBehaviour
     {
         Input2.crouch = null;
     }
-    public void OnPause()
+
+    public void OnMobileInput()
     {
-        menu.SetActive(!menu.activeSelf);
+        mobileMenu.active = !mobileMenu.active;
     }
+
+    public void OnMobileMenu()
+    {
+        mobileMenu2.active = !mobileMenu2.active;
+    }
+    
     public void OnScaleUp()
     {
         scale(+10);
@@ -210,19 +240,49 @@ public class InputCanvas : MonoBehaviour
         area = v;
     }
 
+    void MenuOff() {
+        menu.active = false;
+        mainMenu.active = false;
+        bg.active = false;
+        gameIsPaused = false;
+    }
+
+    public void OnContinue()
+    {
+        MenuOff();
+    }
+
     public void OnSave()
     {
+        MenuOff();
         SaveSystem.Save(player);
-        
     }
 
     public void OnLoad()
     {
+        MenuOff();
         SaveSystem.Load(player);
     }
 
-    public void OnExit()
+    public void OnLoadGame()
     {
-        Environment.Exit(0);
+        MenuOff();
+        SaveSystem.Load(player);
+    }
+
+    public void OnStartGame()
+    {
+        MenuOff();
+    }
+
+    public void OnQuit()
+    {
+        Application.Quit();
+    }
+
+    public void OnMainMenu()
+    {
+        menu.active = false;
+        mainMenu.active = true;
     }
 }
