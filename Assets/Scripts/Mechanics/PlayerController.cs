@@ -14,6 +14,7 @@ namespace Platformer.Mechanics
     /// </summary>
     public class PlayerController : KinematicObject
     {
+        public ParticleSystem particleSystem;
         public AudioClip jumpAudio;
         public AudioClip respawnAudio;
         public AudioClip ouchAudio;
@@ -249,6 +250,13 @@ namespace Platformer.Mechanics
             animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 
             targetVelocity = move * maxSpeed;
+
+            if(Mathf.Abs(velocity.x) > 0.1 || jump)
+                CreateDust();
+        }
+
+        void CreateDust() {
+            particleSystem.Play();
         }
 
         public enum JumpState
