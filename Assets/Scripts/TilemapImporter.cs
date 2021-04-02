@@ -102,20 +102,17 @@ public class TilemapImporter : ScriptedImporter
         //.ForEach(Console.WriteLine);
 
         Debug.Log("levelText: <"+str.Length+">\nrows:"+levelText.Length);
-        var i = 0;
         foreach(var row in levelText) {
-            var parts = row.Item1.Split('|');
-            var str1 = parts[0].Trim();
-            var z = i--; // float.Parse(str1, CultureInfo.InvariantCulture);
-            var file = "f"; //parts[1].Trim();
-            var tilemapType = str1;
             var layer = new GameObject();
-            layer.name = "X Layer " + str1 + " at Z: " + z;
+            var parts = row.Item1.Split('@');
+            var name = parts[0];
+            var z = float.Parse(parts[1], CultureInfo.InvariantCulture);
+            layer.name = "Layer " + name + " at Z: " + z;
             layer.transform.parent = parent.transform;
             var pos = layer.transform.position;
             pos.z = z;
             layer.transform.position = pos;
-            populateLayer(parent, layer, file, tilemapType);
+            populateLayer(parent, layer, row.Item2, name);
         }
         ctx.AddObjectToAsset("main obj", parent);
         ctx.SetMainObject(parent);
@@ -133,7 +130,7 @@ public class TilemapImporter : ScriptedImporter
 
     void populateLayer(GameObject parent, GameObject layer, string data, string tilemapType) {
         var collision = tilemapType == "Level";
-        var foregroundCharacters = !collision;
+        var foregroundCharacters = !collision && !tilemapType.Contains("BG");
 
         var palette = withTilemap.GetComponent<Tilemap>();
         var tilemap = layer.AddComponent<Tilemap>();
@@ -142,8 +139,6 @@ public class TilemapImporter : ScriptedImporter
         {
             tilemapR.material = renderMaterial;
         }
-        //EdgeCollider2D tilemapC = null;
-        //var points = new List<Vector2>();
         if (phsyMaterial != null && collision)
         {
             var tilemapC = layer.AddComponent<TilemapCollider2D>();
@@ -152,7 +147,6 @@ public class TilemapImporter : ScriptedImporter
             var rb = layer.AddComponent<Rigidbody2D>();
             rb.bodyType = RigidbodyType2D.Static;
             var cc = layer.AddComponent<CompositeCollider2D>();
-            //tilemapC = layer.AddComponent<EdgeCollider2D>();
         }
 
         var txt = data
@@ -160,6 +154,7 @@ public class TilemapImporter : ScriptedImporter
         .Replace("\t", "")
         .Replace(" ", "")
         .Split('\n');
+        Debug.Log("txt for layer " + tilemapType + ": " + data.Length);
 
         var y = -1;
         var dict = new Dictionary<int, GameObject>();
