@@ -9,8 +9,10 @@ using UnityEngine.Audio;
 public class InputCanvas : MonoBehaviour
 {
     public static InputCanvas instance;
+    public ParticleSystem menuParticleSystem;
     public bool gameIsPaused;
-    public GameObject bg;
+    public GameObject bgBlack;
+    public GameObject bgPause;
     public GameObject mobileMenu;
     public GameObject mobileMenu2;
     public GameObject menu;
@@ -75,8 +77,9 @@ public class InputCanvas : MonoBehaviour
     {
         audio = GetComponent<AudioSource>();
         menu.active = false;
+        bgPause.active = false;
         mainMenu.active = startInMenu;
-        bg.active = startInMenu;
+        bgBlack.active = startInMenu;
         gameIsPaused = startInMenu;
     }
 
@@ -84,8 +87,11 @@ public class InputCanvas : MonoBehaviour
         Time.timeScale = gameIsPaused ? 0f : 1f;
         AudioListener.pause = gameIsPaused;
         menu.active = !mainMenu.active && gameIsPaused;
-        bg.active = mainMenu.active || menu.active;
+        bgPause.active = mainMenu.active || menu.active;
         inGameUi.active = !mainMenu.active && !gameIsPaused;
+        bgPause.active = gameIsPaused;
+        bgBlack.active = mainMenu.active;
+        menuParticleSystem.gameObject.active = bgBlack.active;
     }
 
     void Update()
@@ -243,7 +249,8 @@ public class InputCanvas : MonoBehaviour
     void MenuOff() {
         menu.active = false;
         mainMenu.active = false;
-        bg.active = false;
+        bgPause.active = false;
+        bgBlack.active = false;
         gameIsPaused = false;
     }
 

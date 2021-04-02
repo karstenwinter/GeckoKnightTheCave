@@ -59,15 +59,8 @@ namespace Platformer.Mechanics
             animator = GetComponent<Animator>();
         }
 
-        public static bool gameIsPaused;
         protected override void Update()
         {
-            if(Input2.GetButtonDown("Cancel")) {
-                gameIsPaused = !gameIsPaused;
-                Time.timeScale = gameIsPaused ? 0f : 1f;
-                AudioListener.pause = gameIsPaused;
-            }
-
             if (controlEnabled)
             {
                 move.x = Input2.GetAxis("Horizontal");
