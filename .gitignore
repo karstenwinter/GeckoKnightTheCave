@@ -60,5 +60,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 firebase-tools-instant-win.exe
+./firebase-tools-instant-win.exe
 /Assets/Scripts/console/bin
 /Assets/Scripts/console/obj

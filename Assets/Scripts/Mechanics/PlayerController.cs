@@ -244,7 +244,7 @@ namespace Platformer.Mechanics
 
             targetVelocity = move * maxSpeed;
 
-            if(Mathf.Abs(velocity.x) > 0.1 || jump)
+            if((velocity.y == 0 && Mathf.Abs(velocity.x) > 2f) || velocity.y > 4f)
                 CreateDust();
         }
 
