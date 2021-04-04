@@ -14,7 +14,8 @@ namespace Platformer.Mechanics
     /// </summary>
     public class PlayerController : KinematicObject
     {
-        public ParticleSystem particleSystem;
+        public ParticleSystem dustParticleSystem, hitParticleSystem;
+        public Vector3 hitPosition;
         public AudioClip jumpAudio;
         public AudioClip respawnAudio;
         public AudioClip ouchAudio;
@@ -77,7 +78,6 @@ namespace Platformer.Mechanics
                   //  Debug.Log("Fire1");
                     //Schedule<PlayerHits>().player = this;
                 }
-                animator.SetBool("hit", Input2.GetButtonDown("Fire1"));
             }
             else
             {
@@ -85,6 +85,14 @@ namespace Platformer.Mechanics
             }
             UpdateJumpState();
             PlayerRaycast();
+            if(controlEnabled) {
+                if(Input2.GetButtonDown("Fire1")) {
+                    animator.SetBool("hit", true);
+                    CreateHit();
+                } else {
+                    animator.SetBool("hit", false);
+                }
+            }
             base.Update();
         }
 
@@ -249,8 +257,15 @@ namespace Platformer.Mechanics
         }
 
         void CreateDust() {
-            particleSystem.Play();
+            dustParticleSystem.Play();
         }
+        void CreateHit() {
+            hitParticleSystem.Play();
+            hitParticleSystem.gameObject.transform.rotation = Quaternion.Euler(0, spriteRenderer.flipX ? -180 : 0, 0);
+            hitParticleSystem.gameObject.transform.position = transform.position + (spriteRenderer.flipX ? -1 : 1) * hitPosition;
+            hitParticleSystem.gameObject.GetComponent<ParticleSystemRenderer>().flip = new Vector3(spriteRenderer.flipX ? 1 : 0, 0, 0);
+        }
+        
 
         public enum JumpState
         {

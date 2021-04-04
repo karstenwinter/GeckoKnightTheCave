@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 
 public class InputCanvas : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class InputCanvas : MonoBehaviour
     public GameObject inGameUi, inGameUi2;
     public GameObject player;
     public GameObject level;
+    public GameObject buttonStartMain, buttonContinuePause;
     public Text titleText;
     public Text infoText;
     public float textWriteSpeed;
@@ -80,14 +82,29 @@ public class InputCanvas : MonoBehaviour
         pauseMenu.active = false;
         bgPause.active = false;
         mainMenu.active = startInMenu;
+        MainMenuActive();
         bgBlack.active = startInMenu;
         gameIsPaused = startInMenu;
+    }
+
+    void MainMenuActive() {
+        if(mainMenu.active) {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(buttonStartMain);
+        }
     }
 
     void PauseLogic() {
         Time.timeScale = gameIsPaused ? 0 : timeScale;
         AudioListener.pause = gameIsPaused;
-        pauseMenu.active = !mainMenu.active && gameIsPaused;
+        var pauseMenuActive = !mainMenu.active && gameIsPaused;
+
+        if(pauseMenuActive && !pauseMenu.active) {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(buttonContinuePause);
+        }
+        pauseMenu.active = pauseMenuActive;
+
         bgPause.active = mainMenu.active || pauseMenu.active;
         inGameUi.active = !mainMenu.active && !gameIsPaused;
         bgPause.active = gameIsPaused;
@@ -95,6 +112,7 @@ public class InputCanvas : MonoBehaviour
         bgBlack.active = mainMenu.active;
         menuParticleSystem.gameObject.active = bgBlack.active;
         level.active = !mainMenu.active;
+        player.active = !mainMenu.active;
         
         inGameUi2.active = inGameUi.active;
     }
@@ -297,5 +315,6 @@ public class InputCanvas : MonoBehaviour
     {
         pauseMenu.active = false;
         mainMenu.active = true;
+        MainMenuActive();
     }
 }
