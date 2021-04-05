@@ -24,6 +24,8 @@ namespace Platformer.Mechanics
         /// Max horizontal speed of the player.
         /// </summary>
         public float maxSpeed = 7;
+        float hitCounter = 0;
+        public float hitFreq = 1;
         /// <summary>
         /// Initial jump velocity at the start of a jump.
         /// </summary>
@@ -89,8 +91,13 @@ namespace Platformer.Mechanics
                 if(Input2.GetButtonDown("Fire1")) {
                     animator.SetBool("hit", true);
                     CreateHit();
+                    hitCounter = hitFreq;
                 } else {
                     animator.SetBool("hit", false);
+                }
+                if(hitCounter > 0) {
+                    hitCounter -= Time.deltaTime;
+                    Debug.Log(hitCounter + " / " + hitFreq);
                 }
             }
             base.Update();
@@ -117,23 +124,29 @@ namespace Platformer.Mechanics
         {
             //RaycastHit2D downRayLeft = Physics2D.Raycast(this.transform.position + new Vector3(-0.35f, 0), Vector2.down, downRaySize);
             //RaycastHit2D downRayRight = Physics2D.Raycast(this.transform.position + new Vector3(0.35f, 0), Vector2.down, downRaySize);
-            int nonPlayer = ~(1 << 8);
+            int nonPlayerNonCameraBounds = ~((1 << 8) | (1 << 12));
 
             RaycastHit2D downRay = Physics2D.Raycast(this.transform.position,
-                Vector2.down, downRaySize, nonPlayer);
+                Vector2.down, downRaySize, nonPlayerNonCameraBounds);
+
+            //Debug.DrawLine(transform.position, new Vector3(0, downRaySize, 0), Color.white, 5f, false);
 
             if (downRay.collider != null)
             {
                 if (downRay.collider.name.StartsWith("AreaChange"))
                 {
-                    //Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
+                    Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
                     InputCanvas.instance.SetArea(downRay.collider.name.Replace("AreaChange",""));
                 }
-                //Debug.Log("coll:" + downRay.collider.gameObject);
+                Debug.Log("coll:" + downRay.collider.gameObject);
                 var enemy = downRay.collider.gameObject.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    enemyTouched();
+                    if(hitCounter > 0) {
+                        Destroy(enemy);
+                    } else {
+                        enemyTouched();
+                    }
                 }
 
                 InputCanvas.instance.SetHealth(health.currentHP, cooldown);
@@ -169,7 +182,7 @@ namespace Platformer.Mechanics
                 }
             }
 
-            RaycastHit2D upRay = Physics2D.Raycast(this.transform.position, Vector2.up, downRaySize, nonPlayer);
+            RaycastHit2D upRay = Physics2D.Raycast(this.transform.position, Vector2.up, downRaySize, nonPlayerNonCameraBounds);
 
             if (upRay.collider != null && lastUpColl == null)
             {

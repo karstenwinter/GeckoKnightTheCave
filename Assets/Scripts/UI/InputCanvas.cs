@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
+using Platformer.Mechanics;
 
 public class InputCanvas : MonoBehaviour
 {
@@ -113,6 +114,7 @@ public class InputCanvas : MonoBehaviour
         menuParticleSystem.gameObject.active = bgBlack.active;
         level.active = !mainMenu.active;
         player.active = !mainMenu.active;
+        player.GetComponent<PlayerController>().controlEnabled = !gameIsPaused;
         
         inGameUi2.active = inGameUi.active;
     }

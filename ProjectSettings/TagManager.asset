@@ -10,6 +10,7 @@ TagManager:
   - NPC
   - Mark
   - Level
+  - CameraBounds
   layers:
   - Default
   - TransparentFX
@@ -21,9 +22,9 @@ TagManager:
   - 
   - Player
   - UI Particles
-  - 
-  - 
-  - 
+  - Level
+  - Test
+  - CameraBounds
   - 
   - 
   - 

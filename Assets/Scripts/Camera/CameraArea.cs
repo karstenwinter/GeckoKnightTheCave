@@ -13,14 +13,14 @@ public class CameraArea : MonoBehaviour
         if(other.tag == "Player") {
             old = confiner.m_BoundingShape2D;
             confiner.m_BoundingShape2D = GetComponent<PolygonCollider2D>();
-            Debug.Log("Enter " + this.gameObject.name);
+            //Debug.Log("Enter " + this.gameObject.name);
         }
     }
     
     void OnTriggerExit2D(Collider2D other)
     {
         if(other.tag == "Player" && old != null) {
-             Debug.Log("Exit " + this.gameObject.name);
+             //Debug.Log("Exit " + this.gameObject.name);
             //confiner.m_BoundingShape2D = old;
             //old = null;
         }
