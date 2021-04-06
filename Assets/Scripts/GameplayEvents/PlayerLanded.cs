@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using System;
-using Platformer.Model;
 
 namespace Platformer.Gameplay
 {
@@ -20,14 +19,14 @@ namespace Platformer.Gameplay
         public override void Execute()
         {
             var foundObjects = GameObject.FindObjectsOfType<EnemyController>();
-            Debug.Log("found landed: " + foundObjects.Length);
+            //Debug.Log("found landed: " + foundObjects.Length);
             var away = true;
             foreach(var enemy in foundObjects)
             {
                 var dist = (enemy.gameObject.transform.position - player.gameObject.transform.position).magnitude;
-                if (dist < 4)
+                if (dist < model.safeSpawnPointSetDistance)
                 {
-                    Debug.Log(enemy + "was to close to player, dist: " + dist);
+                    //Debug.Log(enemy + "was to close to player, dist: " + dist);
                     away = false;
                     break;
                 }
@@ -36,7 +35,7 @@ namespace Platformer.Gameplay
             {
                 model.spawnPoint.transform.position = player.gameObject.transform.position;
 
-                Debug.Log("spawnPoint set to " + player.gameObject.transform.position);
+                //Debug.Log("spawnPoint set to " + player.gameObject.transform.position);
             }
             /*IEnumerable<Vector3> pos = foundObjects.Select(x => x.gameObject.transform.position);
             Debug.Log("found landed: " + 

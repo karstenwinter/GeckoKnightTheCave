@@ -1,7 +1,6 @@
 using Platformer.Gameplay;
 using UnityEngine;
-using static Platformer.Core.Simulation;
-
+using Platformer.Core;
 
 namespace Platformer.Mechanics
 {
@@ -42,21 +41,32 @@ namespace Platformer.Mechanics
         {
             //only exectue OnPlayerEnter if the player collides with this token.
             var player = other.gameObject.GetComponent<PlayerController>();
-            if (player != null) OnPlayerEnter(player);
+            if (player != null) {
+                if (collected) return;
+                //send an event into the gameplay system to perform some behaviour.
+                var ev = Simulation.Schedule<PlayerTokenCollision>();
+                ev.token = this;
+                ev.player = player;
+                
+                //disable the gameObject and remove it from the controller update list.
+                frame = 0;
+                sprites = collectedAnimation;
+                if (controller != null)
+                    collected = true;
+            }
         }
-
-        void OnPlayerEnter(PlayerController player)
+    }
+    
+    class PlayerTokenCollision : Simulation.Event<PlayerTokenCollision>
+    {
+        public PlayerController player;
+        public TokenInstance token;
+        PlatformerModel model = Simulation.GetModel<PlatformerModel>();
+        public override void Execute()
         {
-            if (collected) return;
-            //disable the gameObject and remove it from the controller update list.
-            frame = 0;
-            sprites = collectedAnimation;
-            if (controller != null)
-                collected = true;
-            //send an event into the gameplay system to perform some behaviour.
-            var ev = Schedule<PlayerTokenCollision>();
-            ev.token = this;
-            ev.player = player;
+            player.shells++;
+            AudioSource.PlayClipAtPoint(token.tokenCollectAudio, token.transform.position);
+            token.gameObject.active = false;
         }
     }
 }

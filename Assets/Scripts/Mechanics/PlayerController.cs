@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Platformer.Gameplay;
 using static Platformer.Core.Simulation;
-using Platformer.Model;
 using Platformer.Core;
 
 namespace Platformer.Mechanics
@@ -14,7 +13,7 @@ namespace Platformer.Mechanics
     /// </summary>
     public class PlayerController : KinematicObject
     {
-        public ParticleSystem dustParticleSystem, hitParticleSystem;
+        public ParticleSystem dustParticleSystem, hitParticleSystem, gotHitParticleSystem;
         public Vector3 hitPosition;
         public AudioClip jumpAudio;
         public AudioClip respawnAudio;
@@ -24,7 +23,7 @@ namespace Platformer.Mechanics
         /// Max horizontal speed of the player.
         /// </summary>
         public float maxSpeed = 7;
-        float hitCounter = 0;
+        float currentHitCounter = 0;
         public float hitFreq = 1;
         /// <summary>
         /// Initial jump velocity at the start of a jump.
@@ -48,10 +47,18 @@ namespace Platformer.Mechanics
         
         public float downRaySize = 0.8f;
 
-        float cooldown;
-        float hitCooldownTime = 0.7f;
+        float currentDamageCooldown;
+        float damageCooldownTime = 0.7f;
+        float freezeCooldownTime = 0.16f;
         NPC lastNpcContact;
         Collider2D lastUpColl;
+
+        int _shells;
+        public int shells { get { return _shells; } set { _shells = value; UpdateUI(); } }
+
+        public void UpdateUI() {
+            InputCanvas.instance.UpdateValues((int) health.currentHP, currentDamageCooldown, _shells);
+        }
 
         void Awake()
         {
@@ -60,6 +67,10 @@ namespace Platformer.Mechanics
             collider2d = GetComponent<Collider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
+        }
+
+        void Start() {
+            UpdateUI();
         }
 
         protected override void Update()
@@ -71,7 +82,7 @@ namespace Platformer.Mechanics
                     jumpState = JumpState.PrepareToJump;
                 else if (Input2.GetButtonUp("Jump"))
                 {
-                    Debug.Log("Jump");
+                    //Debug.Log("Jump");
                     stopJump = true;
                     Schedule<PlayerStopJump>().player = this;
                 }
@@ -84,6 +95,7 @@ namespace Platformer.Mechanics
             else
             {
                 move.x = 0;
+                velocity.x = 0;
             }
             UpdateJumpState();
             PlayerRaycast();
@@ -91,13 +103,13 @@ namespace Platformer.Mechanics
                 if(Input2.GetButtonDown("Fire1")) {
                     animator.SetBool("hit", true);
                     CreateHit();
-                    hitCounter = hitFreq;
+                    currentHitCounter = hitFreq;
                 } else {
                     animator.SetBool("hit", false);
                 }
-                if(hitCounter > 0) {
-                    hitCounter -= Time.deltaTime;
-                    Debug.Log(hitCounter + " / " + hitFreq);
+                if(currentHitCounter > 0) {
+                    currentHitCounter -= Time.deltaTime;
+                    Debug.Log(currentHitCounter + " / " + hitFreq);
                 }
             }
             base.Update();
@@ -105,10 +117,11 @@ namespace Platformer.Mechanics
 
         void enemyTouched()
         {
-            if (cooldown <= 0)
+            if (currentDamageCooldown <= 0)
             {
-                cooldown = hitCooldownTime;
+                currentDamageCooldown = damageCooldownTime;
                 health.Decrement();
+                UpdateUI();
             }
         }
 
@@ -130,55 +143,64 @@ namespace Platformer.Mechanics
                 Vector2.down, downRaySize, nonPlayerNonCameraBounds);
 
             //Debug.DrawLine(transform.position, new Vector3(0, downRaySize, 0), Color.white, 5f, false);
-
-            if (downRay.collider != null)
+            if(currentDamageCooldown > 0 && controlEnabled) {
+                currentDamageCooldown -= Time.unscaledDeltaTime;
+                UpdateUI();
+                //if(currentDamageCooldown < freezeCooldownTime) {
+                InputCanvas.instance.timeScale = 0.1f;
+                //} else {
+                    //InputCanvas.instance.timeScale = 1f;
+                //}
+                PlayGotHit();
+                Bounce(new Vector2((move.x == 0 ? 1 : -Mathf.Sign(move.x)) * 8, 4));
+            } else {
+                InputCanvas.instance.timeScale = 1f;
+            }
+            if (downRay.collider != null && controlEnabled)
             {
                 if (downRay.collider.name.StartsWith("AreaChange"))
                 {
-                    Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
+                    // Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
                     InputCanvas.instance.SetArea(downRay.collider.name.Replace("AreaChange",""));
                 }
-                Debug.Log("coll:" + downRay.collider.gameObject);
+                // Debug.Log("coll:" + downRay.collider.gameObject);
                 var enemy = downRay.collider.gameObject.GetComponent<Enemy>();
-                if (enemy != null)
-                {
-                    if(hitCounter > 0) {
-                        Destroy(enemy);
+                if (enemy != null) {
+                    if(currentHitCounter > 0) {
+                        enemy.KillEnemy();
                     } else {
                         enemyTouched();
                     }
                 }
-
-                InputCanvas.instance.SetHealth(health.currentHP, cooldown);
 
                 var npc = downRay.collider.gameObject.GetComponent<NPC>();
                 if (npc != null)
                 {
                     if(lastNpcContact != null && lastNpcContact != npc)
                     {
-                        lastNpcContact.mark.SetActive(false);
+                        lastNpcContact.mark.active = false;
                         lastNpcContact = null;
                     //    Debug.Log("mark false");
                     }
                     var mark = npc.mark;
                     //void OnTriggerEnter(Collider col)
-                    {
+                    //{
                     // Debug.Log("mark true");
-                    mark.SetActive(true);
-                    }
+                    mark.active = true;
+                    //}
 
                     //void OnTriggerExit(Collider col)
-                    {
+                    //{/
                         //Debug.Log("mark false");
                     //  mark.SetActive(false);
-                    }
+                    //}
                     lastNpcContact = npc;
                 }
                 else if(lastNpcContact != null)
                 {
                     lastNpcContact.mark.SetActive(false);
                     lastNpcContact = null;
-                // Debug.Log("mark false 2");
+                    // Debug.Log("mark false 2");
                 }
             }
 
@@ -271,6 +293,9 @@ namespace Platformer.Mechanics
 
         void CreateDust() {
             dustParticleSystem.Play();
+        }
+        void PlayGotHit() {
+            gotHitParticleSystem.Play();
         }
         void CreateHit() {
             hitParticleSystem.Play();

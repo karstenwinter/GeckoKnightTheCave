@@ -47,4 +47,13 @@ public class Enemy : MonoBehaviour
         render.flipX = headingRight;
         animator.SetBool("Walk", true);
     }
+
+    public void KillEnemy() {
+        if(gameObject.active) {
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            gameObject.active = false;
+        }
+        //if (enemy._audio && enemy.ouch)
+        //    enemy._audio.PlayOneShot(enemy.ouch);
+    }
 }

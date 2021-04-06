@@ -33,6 +33,7 @@ public class InputCanvas : MonoBehaviour
     public bool startInMenu;
     public bool jumpFreely;
     public float timeScale = 1f;
+    public GameObject[] hearts = new GameObject[0];
 
     int textIndex;
     float writeTimer;
@@ -259,10 +260,15 @@ public class InputCanvas : MonoBehaviour
         //SetText("Reset :) jumpFreely: " + jumpFreely);
     }
 
-    public void SetHealth(float currentHealth, float cooldown)
+    public void UpdateValues(int currentHealth, float cooldown, int shells)
     {
-        infoText.text = "HEALTH: " + (currentHealth <= 0 ? "" : new String('|', (int)currentHealth))
-            + "\nCooldown: " + (cooldown <= 0 ? "" : new String('|', (int)(cooldown * 10)));
+        //infoText.text = "Health: " + (currentHealth <= 0 ? "" : new String('O', (int)currentHealth))
+        //    + "\nCooldown: " + (cooldown <= 0 ? "" : new String('|', (int)(cooldown * 10)))
+        //    + "\nShells: " + shells;
+        infoText.text = shells.ToString();
+        for(int i=0;i<hearts.Length;i++) {
+            hearts[i].active = i < currentHealth;
+        }
     }
 
     string area;

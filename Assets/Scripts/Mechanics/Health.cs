@@ -36,12 +36,14 @@ namespace Platformer.Mechanics
         /// </summary>
         public void Decrement()
         {
+            //var bef=currentHP;
             currentHP = Mathf.Clamp(currentHP - 1, 0, maxHP);
             if (currentHP == 0)
             {
-                var ev = Schedule<HealthIsZero>();
-                ev.health = this;
+                Schedule<PlayerDeath>();
             }
+            
+            // Debug.Log("Decrement " + bef +" -> " + currentHP);
         }
 
         /// <summary>
@@ -52,9 +54,14 @@ namespace Platformer.Mechanics
             while (currentHP > 0) Decrement();
         }
 
-        void Awake()
+        public void ResetHealth()
         {
             currentHP = maxHP;
+        }
+
+        void Awake()
+        {
+            ResetHealth();
         }
     }
 }

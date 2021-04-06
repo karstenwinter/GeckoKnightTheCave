@@ -1,5 +1,4 @@
 using Platformer.Core;
-using Platformer.Model;
 
 namespace Platformer.Gameplay
 {
