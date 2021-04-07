@@ -37,7 +37,7 @@ namespace Platformer.Mechanics
         public Health health;
         public bool controlEnabled = true;
         public bool IsHitting = false;
-        bool jump;
+        bool jump, hitThisFrame;
         Vector2 move;
         SpriteRenderer spriteRenderer;
         internal Animator animator;
@@ -104,12 +104,14 @@ namespace Platformer.Mechanics
                     animator.SetBool("hit", true);
                     CreateHit();
                     currentHitCounter = hitFreq;
+                    hitThisFrame = true;
                 } else {
                     animator.SetBool("hit", false);
+                    hitThisFrame = false;
                 }
                 if(currentHitCounter > 0) {
                     currentHitCounter -= Time.deltaTime;
-                    Debug.Log(currentHitCounter + " / " + hitFreq);
+                    //Debug.Log(currentHitCounter + " / " + hitFreq);
                 }
             }
             base.Update();
@@ -166,8 +168,8 @@ namespace Platformer.Mechanics
                 // Debug.Log("coll:" + downRay.collider.gameObject);
                 var enemy = downRay.collider.gameObject.GetComponent<Enemy>();
                 if (enemy != null) {
-                    if(currentHitCounter > 0) {
-                        enemy.KillEnemy();
+                    if(hitThisFrame) {
+                        enemy.HitEnemy();
                     } else {
                         enemyTouched();
                     }
@@ -187,6 +189,7 @@ namespace Platformer.Mechanics
                     //{
                     // Debug.Log("mark true");
                     mark.active = true;
+                    //Input2.GetButtonDown("Fire2")
                     //}
 
                     //void OnTriggerExit(Collider col)
@@ -277,10 +280,14 @@ namespace Platformer.Mechanics
                 }
             }
 
-            if (move.x > 0.01f)
-                spriteRenderer.flipX = false;
-            else if (move.x < -0.01f)
+            if(Input2.overrideFlip == true) {
                 spriteRenderer.flipX = true;
+            } else {
+                if (move.x > 0.01f)
+                    spriteRenderer.flipX = false;
+                else if (move.x < -0.01f)
+                    spriteRenderer.flipX = true;
+            }
 
             animator.SetBool("grounded", IsGrounded);
             animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);

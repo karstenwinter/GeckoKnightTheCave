@@ -1,9 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Platformer.Core;
 
 public class Enemy : MonoBehaviour
 {
+    public ParticleSystem gotHitParticleSystem;
+    public int health = 3;
+
     Vector3 startPos;
     public float speed = 2f;
     public float patrolWidth = 8f;
@@ -56,4 +62,21 @@ public class Enemy : MonoBehaviour
         //if (enemy._audio && enemy.ouch)
         //    enemy._audio.PlayOneShot(enemy.ouch);
     }
+    
+    public void HitEnemy() {
+        gotHitParticleSystem.Play();
+        health--;
+        if(health < 0) {
+            Simulation.Schedule<DoThis>(2f).action = () => KillEnemy();
+        }
+    }
 }
+
+    class DoThis : Simulation.Event<DoThis>
+    {
+        public Action action;
+        public override void Execute()
+        {
+            action();
+        }
+    }
