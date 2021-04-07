@@ -22,10 +22,8 @@ public class InputCanvas : MonoBehaviour
     public GameObject player;
     public GameObject level;
     public GameObject buttonStartMain, buttonContinuePause;
-    public Text titleText;
-    public Text infoText;
-    public float textWriteSpeed;
-    public float textStayTime;
+    public Text titleText, infoText, loadStateInfo;
+    public float textWriteSpeed, textStayTime;
     string textToWrite = "Gecko Knight\nChapter 1: The Cave";
     public Button[] mobileButtonArray;
     public AudioClip[] audioClips;
@@ -38,6 +36,7 @@ public class InputCanvas : MonoBehaviour
     int textIndex;
     float writeTimer;
     AudioSource audio;
+    int profile = 1;
 
     public void SetText(string t)
     {
@@ -61,6 +60,9 @@ public class InputCanvas : MonoBehaviour
 
     public void PlaySound(string t)
     {
+        if(audioClips == null)
+            return;
+
         foreach (var clip in audioClips)
         {
             //Debug.Log(clip.name +"=="+ t);
@@ -87,6 +89,12 @@ public class InputCanvas : MonoBehaviour
         MainMenuActive();
         bgBlack.active = startInMenu;
         gameIsPaused = startInMenu;
+        RefreshLoadInfo();
+    }
+
+    void RefreshLoadInfo() {
+        var state = SaveSystem.LoadState(profile);
+        loadStateInfo.text = state == null ? "" : state.ToString();
     }
 
     void MainMenuActive() {
@@ -294,19 +302,19 @@ public class InputCanvas : MonoBehaviour
     public void OnSave()
     {
         MenuOff();
-        SaveSystem.Save(player);
+        SaveSystem.Save(profile, player);
     }
 
     public void OnLoad()
     {
         MenuOff();
-        SaveSystem.Load(player);
+        SaveSystem.Load(profile, player);
     }
 
     public void OnLoadGame()
     {
         MenuOff();
-        SaveSystem.Load(player);
+        SaveSystem.Load(profile, player);
     }
 
     public void OnStartGame()
@@ -321,6 +329,7 @@ public class InputCanvas : MonoBehaviour
 
     public void OnMainMenu()
     {
+        RefreshLoadInfo();
         pauseMenu.active = false;
         mainMenu.active = true;
         MainMenuActive();

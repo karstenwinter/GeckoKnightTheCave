@@ -21,7 +21,7 @@ namespace Platformer.Gameplay
             if (player.audioSource && player.jumpAudio)
                 player.audioSource.PlayOneShot(player.jumpAudio);
                 
-            var foundObjects = GameObject.FindObjectsOfType<EnemyController>();
+            var foundObjects = GameObject.FindObjectsOfType<Enemy>();
             // Debug.Log("found jump: " + foundObjects.Length);
             var away = true;
             foreach(var enemy in foundObjects)

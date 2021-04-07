@@ -19,17 +19,6 @@ namespace Platformer.Mechanics
         public AudioClip respawnAudio;
         public AudioClip ouchAudio;
 
-        /// <summary>
-        /// Max horizontal speed of the player.
-        /// </summary>
-        public float maxSpeed = 7;
-        float currentHitCounter = 0;
-        public float hitFreq = 1;
-        /// <summary>
-        /// Initial jump velocity at the start of a jump.
-        /// </summary>
-        public float jumpTakeOffSpeed = 7;
-
         public JumpState jumpState = JumpState.Grounded;
         private bool stopJump;
         /*internal new*/ public Collider2D collider2d;
@@ -46,15 +35,60 @@ namespace Platformer.Mechanics
         public Bounds Bounds => collider2d.bounds;
         
         public float downRaySize = 0.8f;
+        
+        public float currentDamageCooldown = 0;
+        public float currentHitCounter = 0;
 
-        float currentDamageCooldown;
-        float damageCooldownTime = 0.7f;
-        float freezeCooldownTime = 0.16f;
         NPC lastNpcContact;
         Collider2D lastUpColl;
 
-        int _shells;
         public int shells { get { return _shells; } set { _shells = value; UpdateUI(); } }
+
+        // persisted:
+        int _shells;
+        public string currentArea = "Upper Cave";
+        public string[] inventory = {};
+        public float time;
+        public int percentage;
+        public float maxSpeed = 7;
+        public float hitFreq = 1;
+        public float jumpTakeOffSpeed = 7;
+        public float damageCooldownTime = 0.7f;
+        public float freezeCooldownTime = 0.16f;
+
+        public void ResetCooldowns() {    
+            currentDamageCooldown = 0;
+            currentHitCounter = 0;
+        }
+
+        public SaveState CreateSave() {
+            return new SaveState {
+                x = transform.position.x,
+                y = transform.position.y,
+                currentHP = (int)health.currentHP,
+                maxHP = (int)health.maxHP,
+                currentArea = currentArea,
+                time = (int) time,
+                percentage = percentage,
+                shells = shells,
+                inventory = inventory
+            };
+        }
+        
+        public void InitFromSave(SaveState data) {
+            var pos = transform.position;
+            pos.x = data.x;
+            pos.y = data.y;
+            transform.position = pos;
+            shells = data.shells;
+            currentArea = data.currentArea;
+            inventory = data.inventory;
+            health.currentHP = data.currentHP;
+            health.maxHP = data.maxHP;
+            time = data.time;
+            ResetCooldowns();
+            UpdateUI();
+        }
 
         public void UpdateUI() {
             InputCanvas.instance.UpdateValues((int) health.currentHP, currentDamageCooldown, _shells);
@@ -77,6 +111,7 @@ namespace Platformer.Mechanics
         {
             if (controlEnabled)
             {
+                time += Time.unscaledDeltaTime;
                 move.x = Input2.GetAxis("Horizontal");
                 if (jumpState == JumpState.Grounded && Input2.GetButtonDown("Jump"))
                     jumpState = JumpState.PrepareToJump;
@@ -163,7 +198,8 @@ namespace Platformer.Mechanics
                 if (downRay.collider.name.StartsWith("AreaChange"))
                 {
                     // Debug.LogWarning("downRay.collider.name=" + downRay.collider.name);
-                    InputCanvas.instance.SetArea(downRay.collider.name.Replace("AreaChange",""));
+                    currentArea = downRay.collider.name.Replace("AreaChange","");
+                    InputCanvas.instance.SetArea(currentArea);
                 }
                 // Debug.Log("coll:" + downRay.collider.gameObject);
                 var enemy = downRay.collider.gameObject.GetComponent<Enemy>();
@@ -189,7 +225,13 @@ namespace Platformer.Mechanics
                     //{
                     // Debug.Log("mark true");
                     mark.active = true;
-                    //Input2.GetButtonDown("Fire2")
+                    if(Input2.GetButtonDown("Fire2")) {
+                        var list = new List<string>(inventory);
+                        list.Add("Shard");
+                        inventory = list.ToArray();
+                        time += 1200;
+                        Debug.Log("test item and time");
+                    }
                     //}
 
                     //void OnTriggerExit(Collider col)

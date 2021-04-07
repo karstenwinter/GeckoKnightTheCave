@@ -65,7 +65,9 @@ namespace Platformer.Mechanics
         public override void Execute()
         {
             player.shells++;
-            AudioSource.PlayClipAtPoint(token.tokenCollectAudio, token.transform.position);
+            if(token.tokenCollectAudio) {
+                AudioSource.PlayClipAtPoint(token.tokenCollectAudio, token.transform.position);
+            }
             token.gameObject.active = false;
         }
     }

@@ -18,7 +18,7 @@ namespace Platformer.Gameplay
 
         public override void Execute()
         {
-            var foundObjects = GameObject.FindObjectsOfType<EnemyController>();
+            var foundObjects = GameObject.FindObjectsOfType<Enemy>();
             //Debug.Log("found landed: " + foundObjects.Length);
             var away = true;
             foreach(var enemy in foundObjects)

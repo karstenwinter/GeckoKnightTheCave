@@ -5,49 +5,68 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary; 
+//using System.Runtime.Serialization.Formatters.Binary; 
+using Platformer.Mechanics;
 
 [Serializable]
 public class SaveState {
-    public float startPositionX, startPositionY;
-    public float currentHealth;
-    public string area;
-    public float time;
-    public float percentage;
+    public float x, y, time;
+    public int currentHP, maxHP, percentage, shells;
+    public string currentArea;
+    public string[] inventory;
+    public override string ToString () {
+        var t = new DateTime();
+        t.AddSeconds(time);
+        var h = t.Hour;
+        var m = t.Minute;
+        var s = t.Second;
+        return h + "h " + time / 60 + "m " + s + "s, in " + currentArea + ", " + shells + " shells, " + maxHP + " HP";
+        // + " shells, " + (inventory == null ? 0 : inventory.Length) + " items";
+        // currentHP, maxHP
+    }
 }
 
 public static class SaveSystem { 
-    public static SaveState Save (GameObject player) { 
-        var formatter = new BinaryFormatter(); 
-        var path = Application.persistentDataPath + "/player.fun"; 
+    public static SaveState Save(int index, GameObject player) { 
+        //var formatter = new BinaryFormatter(); 
+        var playerContr = player.GetComponent<PlayerController>();
+        var path = Application.persistentDataPath + "/player"+index+".fun"; 
         var stream = new FileStream(path, FileMode.Create); 
-        var data = new SaveState() {
-            startPositionX = player.transform.position.x, startPositionY = player.transform.position.y,
-            currentHealth = 1,
-            area = "asd",
-            time = Time.fixedDeltaTime,
-            percentage = 0
-        };
-        formatter.Serialize(stream, data);
+        
+        var data = playerContr.CreateSave();
+        var str = JsonUtility.ToJson(data, true);
+        //Debug.Log("ToJson:"+str);
+        //formatter.Serialize(stream, data);
+        var w = new StreamWriter(stream);
+        w.Write(str);
+        w.Flush();
+        w.Dispose();
         stream.Close(); 
         return data;
     }
 
-    public static SaveState Load(GameObject player) { 
-        var path = Application.persistentDataPath + "/player.fun";
+    public static SaveState LoadState(int index) { 
+        var path = Application.persistentDataPath + "/player"+index+".fun"; 
         if (File.Exists(path)) { 
-            var formatter = new BinaryFormatter(); 
-            var stream = new FileStream(path, FileMode.Open); 
-            var data = formatter.Deserialize(stream) as SaveState; 
-            stream.Close ();
-            var pos = player.transform.position;
-            pos.x = data.startPositionX;
-            pos.y = data.startPositionY;
-            player.transform.position = pos;
+            FileStream stream = new FileStream(path, FileMode.Open); 
+            string str = new StreamReader(stream, true).ReadToEnd();
+            //Debug.Log("ReadToEnd:" + str);
+            var data = JsonUtility.FromJson<SaveState>(str);
+            //Debug.Log("FromJson:"+data);
+            stream.Close();
             return data; 
         } else { 
             Debug.LogError("Save file not found in " + path); 
             return null; 
         } 
+    }
+
+    public static SaveState Load(int index, GameObject player) { 
+        var data = LoadState(index);
+        if (data != null) { 
+            var playerContr = player.GetComponent<PlayerController>();
+            playerContr.InitFromSave(data);
+        }
+        return data; 
     }
 }
