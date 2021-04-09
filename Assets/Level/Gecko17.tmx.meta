@@ -12,10 +12,10 @@ ScriptedImporter:
   tileSize: 1.2
   withTilemap: {fileID: 4825380589754685331, guid: 4aa063dcf1662b34da7097f6da2142c5,
     type: 3}
-  startX: 0
-  startY: 0
-  width: 512
-  height: 512
+  startX: 233
+  startY: 308
+  width: 222
+  height: 222
   dummy: 0
   foregroundCharacters: 0
   phsyMaterial: {fileID: 6200000, guid: 7c252a942fd417d4b8f7f164dbcff2a5, type: 2}

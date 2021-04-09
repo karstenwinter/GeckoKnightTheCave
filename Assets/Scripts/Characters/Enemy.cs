@@ -67,16 +67,16 @@ public class Enemy : MonoBehaviour
         gotHitParticleSystem.Play();
         health--;
         if(health < 0) {
-            Simulation.Schedule<DoThis>(2f).action = () => KillEnemy();
+            Simulation.Schedule<DoThis>(1f).action = () => KillEnemy();
         }
     }
 }
 
-    class DoThis : Simulation.Event<DoThis>
+class DoThis : Simulation.Event<DoThis>
+{
+    public Action action;
+    public override void Execute()
     {
-        public Action action;
-        public override void Execute()
-        {
-            action();
-        }
+        action();
     }
+}

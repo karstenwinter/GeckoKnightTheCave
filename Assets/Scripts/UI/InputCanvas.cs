@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -13,16 +14,17 @@ public class InputCanvas : MonoBehaviour
     public static InputCanvas instance;
     public ParticleSystem menuParticleSystem;
     public bool gameIsPaused;
-    public GameObject bgBlack;
-    public GameObject bgPause;
-    public GameObject mobileMenu, mobileControls1, mobileControls2, mobileControls3;
-    public GameObject pauseMenu;
-    public GameObject mainMenu;
-    public GameObject inGameUi, inGameUi2;
-    public GameObject player;
-    public GameObject level;
-    public GameObject buttonStartMain, buttonContinuePause;
-    public Text titleText, infoText, loadStateInfo;
+    public GameObject bgBlack, bgPause,
+        mainMenu, pauseMenu,
+        mainMenuButtons, optionsMenu,
+        player, level,
+        buttonStartMain, buttonContinuePause, buttonProfile,
+        fontCredits;
+        
+    public GameObject[] inGameUi, mobileControls;
+
+    public Text titleText, infoText, loadStateInfo, languageInfo, difficultyInfo, profileInfo, inputInfo;
+
     public float textWriteSpeed, textStayTime;
     string textToWrite = "Gecko Knight\nChapter 1: The Cave";
     public Button[] mobileButtonArray;
@@ -36,7 +38,10 @@ public class InputCanvas : MonoBehaviour
     int textIndex;
     float writeTimer;
     AudioSource audio;
-    int profile = 1;
+    string profile = "First";
+    string difficulty = "Normal";
+    string language = "English";
+    string input = "Keyboard or Gamepad";
 
     public void SetText(string t)
     {
@@ -89,11 +94,22 @@ public class InputCanvas : MonoBehaviour
         MainMenuActive();
         bgBlack.active = startInMenu;
         gameIsPaused = startInMenu;
+        
+        var settings = SaveSystem.LoadSettings(false);
+        if(settings != null) {
+            profile = settings.profile;
+        } else {
+            saveSettings();
+        }
         RefreshLoadInfo();
     }
 
+    void saveSettings() {
+        SaveSystem.SaveSettings(new GlobalSettings { profile = profile });
+    }
+
     void RefreshLoadInfo() {
-        var state = SaveSystem.LoadState(profile);
+        var state = SaveSystem.LoadState(profile, false);
         loadStateInfo.text = state == null ? "" : state.ToString();
     }
 
@@ -116,7 +132,7 @@ public class InputCanvas : MonoBehaviour
         pauseMenu.active = pauseMenuActive;
 
         bgPause.active = mainMenu.active || pauseMenu.active;
-        inGameUi.active = !mainMenu.active && !gameIsPaused;
+        Array.ForEach(inGameUi, x => x.active = !mainMenu.active && !gameIsPaused);
         bgPause.active = gameIsPaused;
 
         bgBlack.active = mainMenu.active;
@@ -124,8 +140,6 @@ public class InputCanvas : MonoBehaviour
         level.active = !mainMenu.active;
         player.active = !mainMenu.active;
         player.GetComponent<PlayerController>().controlEnabled = !gameIsPaused;
-        
-        inGameUi2.active = inGameUi.active;
     }
 
     void Update()
@@ -227,16 +241,10 @@ public class InputCanvas : MonoBehaviour
         Input2.crouch = null;
     }
 
-    public void OnMobileInput()
-    {
-        mobileControls1.active = !mobileControls1.active;
-        mobileControls2.active = !mobileControls2.active;
-        mobileControls3.active = !mobileControls3.active;
-    }
-
     public void OnMobileMenu()
     {
-        mobileMenu.active = !mobileMenu.active;
+        //mobileMenu.active = !mobileMenu.active;
+        gameIsPaused = !gameIsPaused;
     }
     
     public void OnScaleUp()
@@ -320,6 +328,68 @@ public class InputCanvas : MonoBehaviour
     public void OnStartGame()
     {
         MenuOff();
+    }
+
+    public void OnLanguage()
+    {
+        var oldVal = language;
+        language = language == "English" ? "Deutsch" : "English";
+        switchBold(languageInfo, oldVal, language);
+    }
+
+    public void OnMobileInput()
+    {
+        var oldVal = input;
+        input = input == "Keyboard or Gamepad" ? "Touchpad" : "Keyboard or Gamepad";
+        switchBold(inputInfo, oldVal, input);
+
+        Array.ForEach(mobileControls, x => x.active = input == "Touchpad");
+    }
+
+    public void OnDifficulty()
+    {
+        var oldVal = difficulty;
+        difficulty = difficulty == "Normal" ? "Easy" : "Normal";
+        switchBold(difficultyInfo, oldVal, difficulty);
+    }
+
+    public void OnProfile()
+    {
+        var oldVal = profile;
+        profile = profile == "First" ? "Second" : "First";
+        switchBold(profileInfo, oldVal, profile);
+        saveSettings();
+    }
+
+    void switchBold(Text text, string oldVal, string newVal) {
+        text.text = text.text
+                .Replace("<b>"+oldVal+"</b>", oldVal)
+                .Replace(newVal, "<b>"+newVal+"</b>");
+    }
+
+    public void OnOptionsBack()
+    {
+        mainMenuButtons.active = !mainMenuButtons.active;
+        optionsMenu.active = !optionsMenu.active;
+        fontCredits.active = optionsMenu.active;
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(buttonStartMain);
+    }
+
+    public void OnOptions()
+    {
+        mainMenuButtons.active = !mainMenuButtons.active;
+        optionsMenu.active = !optionsMenu.active;
+        fontCredits.active = optionsMenu.active;
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(buttonProfile);
+    }
+
+    public void OnCommunity()
+    {
+        Application.OpenURL("https://discord.gg/PHXRWVf");
     }
 
     public void OnQuit()

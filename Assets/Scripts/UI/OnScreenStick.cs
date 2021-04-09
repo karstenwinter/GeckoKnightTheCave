@@ -11,6 +11,8 @@ namespace UnityEngine.InputSystem.OnScreen
     public class OnScreenStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
     {
         public string mode;
+        public float threshold = 0.2f;
+
         public void OnPointerDown(PointerEventData eventData)
         {
             if (eventData == null)
@@ -46,14 +48,15 @@ namespace UnityEngine.InputSystem.OnScreen
         }
 
         void SendValueToControl(Vector2 arg) {
+            // Debug.Log("arg: " + arg);
             if(mode == "Move") {
-                Input2.hor = arg.x;
-                Input2.vert = arg.y;
+                Input2.hor = Mathf.Abs(arg.x) > threshold ? arg.x : float.NaN;
+                Input2.vert = Mathf.Abs(arg.y) > threshold ? arg.y : float.NaN;
             } else if(mode == "Hit") {
-                Input2.jump = arg.y > 0.1 ? (bool?) true : null;
-                Input2.hit = arg.x < -0.1 ? (bool?) true : null;
-                Input2.overrideFlip = arg.x < -0.1 ? (bool?) true : null;
-                Input2.crouch = arg.y < -0.1 ? (bool?) true : null;
+                Input2.jump = arg.y > threshold ? (bool?) true : null;
+                Input2.hit = arg.x < -threshold ? (bool?) true : null;
+                Input2.overrideFlip = arg.x < -threshold ? (bool?) true : arg.x < -threshold ? (bool?) false : null;
+                Input2.crouch = arg.y < -threshold ? (bool?) true : null;
             }
         }
 

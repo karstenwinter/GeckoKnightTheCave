@@ -38,10 +38,10 @@ namespace Platformer.Mechanics
         {
             //var bef=currentHP;
             currentHP = Mathf.Clamp(currentHP - 1, 0, maxHP);
-            if (currentHP == 0)
-            {
-                Schedule<PlayerDeath>();
-            }
+            //if (currentHP == 0)
+            //{
+            Schedule<PlayerDeath>();
+            //}
             
             // Debug.Log("Decrement " + bef +" -> " + currentHP);
         }

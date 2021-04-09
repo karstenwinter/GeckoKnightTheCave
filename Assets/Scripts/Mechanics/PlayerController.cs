@@ -44,6 +44,8 @@ namespace Platformer.Mechanics
 
         public int shells { get { return _shells; } set { _shells = value; UpdateUI(); } }
 
+        public const float standardHitLength = 0.8f;
+
         // persisted:
         int _shells;
         public string currentArea = "Upper Cave";
@@ -55,6 +57,7 @@ namespace Platformer.Mechanics
         public float jumpTakeOffSpeed = 7;
         public float damageCooldownTime = 0.7f;
         public float freezeCooldownTime = 0.16f;
+        public float hitLength = standardHitLength;
 
         public void ResetCooldowns() {    
             currentDamageCooldown = 0;
@@ -158,7 +161,10 @@ namespace Platformer.Mechanics
             {
                 currentDamageCooldown = damageCooldownTime;
                 health.Decrement();
+                move = Vector2.zero;
+                velocity = Vector2.zero;
                 UpdateUI();
+                PlayGotHit();
             }
         }
 
@@ -179,20 +185,32 @@ namespace Platformer.Mechanics
             RaycastHit2D downRay = Physics2D.Raycast(this.transform.position,
                 Vector2.down, downRaySize, nonPlayerNonCameraBounds);
 
+            RaycastHit2D forwardRay = Physics2D.Raycast(this.transform.position,
+                spriteRenderer.flipX ? Vector2.right : Vector2.left, hitLength, nonPlayerNonCameraBounds);
+
             //Debug.DrawLine(transform.position, new Vector3(0, downRaySize, 0), Color.white, 5f, false);
             if(currentDamageCooldown > 0 && controlEnabled) {
                 currentDamageCooldown -= Time.unscaledDeltaTime;
-                UpdateUI();
+                //UpdateUI();
                 //if(currentDamageCooldown < freezeCooldownTime) {
-                InputCanvas.instance.timeScale = 0.1f;
+                //InputCanvas.instance.timeScale = 0.1f;
                 //} else {
                     //InputCanvas.instance.timeScale = 1f;
                 //}
-                PlayGotHit();
-                Bounce(new Vector2((move.x == 0 ? 1 : -Mathf.Sign(move.x)) * 8, 4));
+                //PlayGotHit();
+                //Bounce(new Vector2((move.x == 0 ? 1 : -Mathf.Sign(move.x)) * 8, 4));
             } else {
-                InputCanvas.instance.timeScale = 1f;
+                //InputCanvas.instance.timeScale = 1f;
             }
+            
+            if (forwardRay.collider != null && controlEnabled)
+            {
+                var enemy = forwardRay.collider.gameObject.GetComponent<Enemy>();
+                if (enemy != null && hitThisFrame) {
+                    enemy.HitEnemy();
+                }
+            }
+
             if (downRay.collider != null && controlEnabled)
             {
                 if (downRay.collider.name.StartsWith("AreaChange"))
@@ -204,11 +222,7 @@ namespace Platformer.Mechanics
                 // Debug.Log("coll:" + downRay.collider.gameObject);
                 var enemy = downRay.collider.gameObject.GetComponent<Enemy>();
                 if (enemy != null) {
-                    if(hitThisFrame) {
-                        enemy.HitEnemy();
-                    } else {
-                        enemyTouched();
-                    }
+                    enemyTouched();
                 }
 
                 var npc = downRay.collider.gameObject.GetComponent<NPC>();
@@ -231,6 +245,8 @@ namespace Platformer.Mechanics
                         inventory = list.ToArray();
                         time += 1200;
                         Debug.Log("test item and time");
+                        health.currentHP = health.maxHP;
+                        UpdateUI();
                     }
                     //}
 
@@ -322,8 +338,8 @@ namespace Platformer.Mechanics
                 }
             }
 
-            if(Input2.overrideFlip == true) {
-                spriteRenderer.flipX = true;
+            if(Input2.overrideFlip != null) {
+                spriteRenderer.flipX = Input2.overrideFlip.Value;
             } else {
                 if (move.x > 0.01f)
                     spriteRenderer.flipX = false;
